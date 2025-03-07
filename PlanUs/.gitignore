@@ -1,0 +1,6 @@
+target/
+*.iml
+*.class
+*.war
+*.ear
+META-INF/MANIFEST.MF
