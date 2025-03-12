@@ -101,6 +101,24 @@
 			<servlet-name>groups</servlet-name>
 			<url-pattern>*.groups</url-pattern>
 		</servlet-mapping>
-		
-		
+		            
+            
+         <!-- *.accountbook 요청에 따라 accountbook-context.xml 파일로 이동 -->
+      <servlet>
+         <servlet-name>accountbook</servlet-name>
+         <servlet-class>org.springframework.web.servlet.DispatcherServlet
+         </servlet-class>
+         <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/spring/appServlet/accountbook-context.xml
+            </param-value>
+         </init-param>
+         <load-on-startup>1</load-on-startup>
+      </servlet>
+   
+      <servlet-mapping>
+         <servlet-name>accountbook</servlet-name>
+         <url-pattern>*.accountbook</url-pattern>
+      </servlet-mapping>
+      
 </web-app>
