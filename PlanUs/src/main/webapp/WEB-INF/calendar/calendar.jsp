@@ -14,12 +14,10 @@
 		
 	}
 	#calendar{
-		background-color :  #F2F2F2;
          width : 90vw;
          height : 700px;
          aspect-ratio:1.2/1;
          margin:20px;
-         border: hidden;
 	} 
 	#month{
 		width : 100%;
@@ -45,47 +43,59 @@
 	
 	/*화면크기가 1000px보다 클 때 */
    @media screen and (min-width:1000px){
+		#calendar{
+	         width : 83vw;
+	         height : 700px;
+	         aspect-ratio:1.2/1;
+	         margin:20px;
+		} 
       #to-do {
          display: inline-block;
          background-color :  #F2F2F2;
          width : 40vw;
-         aspect-ratio:1.5/1;
+         aspect-ratio:0.7/1;
+         margin:20px;
+         text-align:left;
+         position:relative;
+      }  
+      #right-column {
+	    display: flex;
+	    flex-direction: column; /* 세로 배치 */
+        margin:20px;
+        margin-top : 3px;
+	    align-items: center; /* 내부 요소 정렬 */
+	    width: 40vw;
+	}
+       #schedule{
+         display: inline-block;
+         background-color :  #F2F2F2;
+         width : 40vw;
+         aspect-ratio:1.4/1;
          margin:20px;
          text-align:left;
          position:relative;
       }
-      #category_state {
+      #diary {
          background-color : #F2F2F2;
          width : 40vw;
-         aspect-ratio:1.2/1;
+         aspect-ratio:1.6/1;
          margin:20px;
          text-align:left;
          position:relative;
-         top:-90px;
       }
-      #state_table {
-         width:90%;
-         margin-left:10px;
-         margin-top:30px;
-      } 
    }
 
    /*화면크기가 1000px보다 작을 때 */
    @media screen and (max-width:1000px){
-      #to-do {
+      #to-do  {
          background-color : #F2F2F2;
          width : 90vw;
          aspect-ratio:1.5/1;
          margin:20px;
          text-align:left;
          position:relative;
-      }
-      #state_table {
-         width:90%;
-         margin-left:10px;
-         margin-top:30px;
-      } 
-      #category_state {
+      }	 
+      #schedule {
          background-color : #F2F2F2;
          width : 90vw;
          aspect-ratio:1.2/1;
@@ -93,6 +103,14 @@
          text-align:left;
          position:relative;
       }
+      #diary {
+         background-color : #F2F2F2;
+         width : 90vw;
+         aspect-ratio:1.2/1;
+         margin:20px;
+         text-align:left;
+         position:relative;
+      } 
    }
 </style>
 
@@ -121,23 +139,32 @@
 			<p class="oswald-title">
 	            TO-DO !
 	         </p>
+	         
+	         <table id = "to-do_table">
+	         		<tr>	
+	         			<td>
+	         			</td>
+	         		</tr>
+	         </table>
 		</div>
 	
 	</div>
 	
-	<div id = "schedule">
-		<div class = "state_title"> 
-			<p class="oswald-title">
-	            SCHEDULE !
-	         </p>
-	        </div>
-	</div>
-	
-	<div id = "diary">
-		<div class = "state_title"> 
-			<p class="oswald-title">
-	            DIARY !
-	         </p>
+	<div id = "right-column">
+		<div id = "schedule">
+			<div class = "state_title"> 
+				<p class="oswald-title">
+		            SCHEDULE !
+		         </p>
+		        </div>
+		</div>
+		
+		<div id = "diary">
+			<div class = "state_title"> 
+				<p class="oswald-title">
+		            DIARY !
+		         </p>
+			</div>
 		</div>
 	</div>
 </div>
