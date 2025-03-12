@@ -1,4 +1,4 @@
-package groups.controller;
+package users.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,23 +15,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import groups.model.GroupsDao;
+import groups.model.groupsDao;
+import users.model.usersDao;
 
 @Controller
-public class GroupsController {
+public class usersController {
 
-	private final String Command1 = "/1.gropus";
-
-	final String getPage = "groupsHome";  // CLUB(GROUPS)page.
-
-//	final String gotoPage = "redirect:/home.student";  // 홈 페이지로 리디렉션
-//	final String checkOutPage = "redirect:/login.in";  // 로그인 페이지로 리디렉션
-//	final String failPage = "/home.student";  // 실패 시 홈 페이지
+	private final String Command = "/1.users";
+	
+	final String getPage = "usersHome";  // UsersPage.
 
 	@Autowired
-	GroupsDao gDao;
+	usersDao uDao;
 
-	@RequestMapping(value = Command1, method = RequestMethod.POST)
+	@RequestMapping(value = Command, method = RequestMethod.POST)
 	public ModelAndView start(
 			@RequestParam(value = "U_CD", required = false) String U_CD,
 			@RequestParam(value = "U_ID", required = false) String U_ID,

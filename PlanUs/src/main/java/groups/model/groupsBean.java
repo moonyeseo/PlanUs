@@ -2,7 +2,7 @@ package groups.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class GroupsBean {
+public class groupsBean {
 
 	private String G_CD;
 	private String U_CD;	//유저코드

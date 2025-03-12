@@ -5,19 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GroupsDao {
+public class groupsDao {
 
 	@Autowired
 	SqlSessionTemplate sqlSessionTemplate;
 	
 	private String namespace = "groups.model.Groups";
 	
-	public GroupsDao() {
+	public groupsDao() {
 		
 	}
-	
-//	public void studentReqInsert(RequestBean req) {
-//		sqlSessionTemplate.insert(namespace + ".studentReqInsert", req);
-//	}
-	
+
 }

@@ -66,4 +66,26 @@
 			<servlet-name>calendar</servlet-name>
 			<url-pattern>*.calendar</url-pattern>
 		</servlet-mapping>
+		
+		<!-- *.groups 요청에 따라 groups-context.xml 파일로 이동 -->
+		<servlet>
+			<servlet-name>groups</servlet-name>
+			<servlet-class>
+				org.springframework.web.servlet.DispatcherServlet
+			</servlet-class>
+			<init-param>
+				<param-name>contextConfigLocation</param-name>
+				<param-value>
+					/WEB-INF/spring/appServlet/groups-context.xml
+				</param-value>
+			</init-param>
+			<load-on-startup>1</load-on-startup>
+		</servlet>
+	
+		<servlet-mapping>
+			<servlet-name>groups</servlet-name>
+			<url-pattern>*.groups</url-pattern>
+		</servlet-mapping>
+		
+		
 </web-app>

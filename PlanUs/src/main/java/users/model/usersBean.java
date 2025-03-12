@@ -2,7 +2,7 @@ package users.model;
 
 import java.sql.Date;
 
-public class UsersBean {
+public class usersBean {
 
 	private String U_CD;
 	private String U_PWD;
@@ -12,11 +12,11 @@ public class UsersBean {
 	private String B_NAME;	//USERS BANK NAME
 	private Date U_BIRTH;	//USERS BIRTH
 
-	public UsersBean() {
+	public usersBean() {
 
 	}
 
-	public UsersBean(String U_CD, String U_PWD, String U_NAME, String U_PHONE, String U_ACN, String B_NAME, Date U_BIRTH) {
+	public usersBean(String U_CD, String U_PWD, String U_NAME, String U_PHONE, String U_ACN, String B_NAME, Date U_BIRTH) {
 		super();
 		this.U_CD = U_CD;
 		this.U_PWD = U_PWD;
