@@ -7,6 +7,8 @@
   <configuration> 
   	<mappers>
   		<mapper resource="mybatis/calendar.xml"/>
+  		<mapper resource="mybatis/groups.xml"/>
+  		<mapper resource="mybatis/users.xml"/>
   		
   	</mappers>
   </configuration>

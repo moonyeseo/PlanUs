@@ -328,6 +328,14 @@
 			</li>
 		</ul>
 	</div>
+<<<<<<< HEAD
+=======
+<!-- 
+	<h1 class="kor_font">
+		안녕 우리들의 플젝이 드디어 시작이다!
+	</h1>
+-->
+>>>>>>> refs/heads/master
 </div>
 
 </body>
