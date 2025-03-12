@@ -14,10 +14,12 @@
 		
 	}
 	#calendar{
-		width : 90%;
-		height : 700px;
-		margin : auto;
-		text-align : center;
+		background-color :  #F2F2F2;
+         width : 90vw;
+         height : 700px;
+         aspect-ratio:1.2/1;
+         margin:20px;
+         border: hidden;
 	} 
 	#month{
 		width : 100%;
@@ -25,6 +27,7 @@
 		margin : auto;
 		text-align : center;
 		font-size: 20px;
+		background-color: white;
 	}
 	#number{
 		font-size: 30px;
@@ -42,8 +45,8 @@
 	
 	/*화면크기가 1000px보다 클 때 */
    @media screen and (min-width:1000px){
-      #account_state {
-           display: inline-block;
+      #to-do {
+         display: inline-block;
          background-color :  #F2F2F2;
          width : 40vw;
          aspect-ratio:1.5/1;
@@ -69,15 +72,7 @@
 
    /*화면크기가 1000px보다 작을 때 */
    @media screen and (max-width:1000px){
-
-      #accountbook_calendar {
-         background-color : #F2F2F2;
-         width : 90vw;
-         aspect-ratio:1.2/1;
-         margin:20px;
-      }
-
-      #account_state {
+      #to-do {
          background-color : #F2F2F2;
          width : 90vw;
          aspect-ratio:1.5/1;
