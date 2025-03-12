@@ -187,7 +187,7 @@
 			height:100vh;
 			width:200px;	
 			position : absolute;	
-			right:-30%;
+			right:-50%;
 			z-index:0;
 			
 		}
@@ -293,7 +293,7 @@
 					</a>
 				</td>
 				<td>
-					<a class = "menu_list oswald-menu" href = "">
+					<a class = "menu_list oswald-menu" href = "go.accountbook">
 						ACCOUNTBOOK
 					</a>
 				</td>
@@ -329,7 +329,7 @@
 				</a>
 			</li>
 			<li>
-				<a class = "oswald-menu" href = "">
+				<a class = "oswald-menu" href = "go.accountbook">
 					ACCOUNTBOOK
 				</a>
 			</li>
