@@ -81,6 +81,23 @@
 	.menu-trigger {
 		display:none;
 	}
+	 .state_title {
+      position: absolute;
+        display: inline-block;
+       width:100%;
+       top:-37px;
+       color:#FF3B7C;
+       margin-left:6px
+   }
+   .oswald-title {
+     font-family: "Oswald", sans-serif;
+     font-optical-sizing: auto;
+     font-weight: 400;
+     font-style: normal;
+     font-size:22px;
+     color:#FF3B7C;
+   }
+	
 	
 	/*화면크기가 1000px보다 클 때 */
 	@media screen and (min-width:1000px){
@@ -328,14 +345,6 @@
 			</li>
 		</ul>
 	</div>
-<<<<<<< HEAD
-=======
-<!-- 
-	<h1 class="kor_font">
-		안녕 우리들의 플젝이 드디어 시작이다!
-	</h1>
--->
->>>>>>> refs/heads/master
 </div>
 
 </body>
