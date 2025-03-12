@@ -4,11 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-
-public class calendarTempController {
-	@RequestMapping("temp.calendar")
+public class calendarController {
+	@RequestMapping("go.calendar")
 	public String doAction() {
 		
-		return "temp_calendar";
+		return "calendar";
 	}
 }

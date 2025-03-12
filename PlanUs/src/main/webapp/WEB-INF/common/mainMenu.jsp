@@ -166,7 +166,7 @@
 		}
 		#toggle_menu{
 			display:inline-block;
-			background-color:#E1E1E1;
+			background-color:#F2F2F2;
 			height:100vh;
 			width:200px;	
 			position : absolute;	
@@ -238,7 +238,7 @@
 <body>
 <div id = "main_menu">
 	<div id="logo">
-		<a href = "">
+		<a href = "go.home">
 			<img id="logo_img" src = "resources/image/logo.jpg" alt="image"/>
 		</a>
 	</div>
@@ -258,7 +258,7 @@
 					<table style="float:right">
 						<tr>
 							<td>
-								<img id="user_img" src = "resources/image/user_img.png" alt="image"/>
+									<img id="user_img" src = "resources/image/user_img.png" alt="image"/>
 							</td>
 							<td>
 								<a href = "" class="oswald-menu">
@@ -271,7 +271,7 @@
 			</tr>
 			<tr>
 				<td>
-					<a class = "menu_list oswald-menu" href = "">
+					<a id = "menu_calendar" class = "menu_list oswald-menu" href = "go.calendar">
 						CALENDAR
 					</a>
 				</td>
@@ -307,7 +307,7 @@
 	<div id="toggle_menu">
 		<ul id="toggle_list">
 			<li>
-				<a class = "oswald-menu" href = "">
+				<a class = "oswald-menu" href = "go.calendar">
 					CALENDAR
 				</a>
 			</li>
@@ -328,9 +328,6 @@
 			</li>
 		</ul>
 	</div>
-	<h1 class="kor_font">
-		안녕 우리들의 플젝이 드디어 시작이다!
-	</h1>
 </div>
 
 </body>
