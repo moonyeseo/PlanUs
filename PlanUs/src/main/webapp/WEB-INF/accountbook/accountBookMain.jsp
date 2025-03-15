@@ -2,252 +2,609 @@
 <%@include file="../common/mainMenu.jsp"%>
 <html>
 <head>
-	<title>Planus'_'</title>
+   <title>Planus'_'</title>
 </head>
 <style>
-	#accountbook_main {
-	    display: flex;
-	    justify-content: center; /* 중앙 정렬 */
-	    align-items: flex-start; /* 위쪽 정렬 */
-	    flex-wrap: wrap; /* 화면이 작을 때 자동 줄바*/
+   /* 메인 컨테이너 */
+   #accountbook_main {
+       display: flex;
+       flex-wrap: wrap;
+       justify-content: center; /* 중앙 정렬 */
+       align-items: flex-start; /* 위쪽 정렬 */
+       gap: 30px; /* 요소 간 일정한 간격 유지 */
+       margin-top: 20px;
+   }
+   .td_left {
+       text-align:left;
+	   vertical-align:middle;
+   }
+   .td_right {
+       text-align:right;
+	   vertical-align:middle;
+   }
+	
+	
+   /* TOTAL STATE와 MONEYFLOW STATE를 세로로 정렬하는 컨테이너 */
+   #total_moneyflow_wrapper {
+       display: flex;
+       flex-direction: column; /* 세로로 정렬 */
+       gap: 30px; /* 요소 간격 */
+       width: 40vw; /* 두 요소를 세로로 배치 */
+   }
+
+   /* 공통 스타일 */
+   #accountbook_calendar,
+   #total_state,
+   #moneyflow_state,
+   #account_state,
+   #category_state {
+       background-color: #F2F2F2;
+       position: relative;
+   }
+
+   /* 달력 */
+   #accountbook_calendar {
+       width: 40vw;
+       aspect-ratio: 0.8 / 1;
+   }
+
+   /* TOTAL STATE */
+   #total_state {
+       width: 40vw;
+       aspect-ratio: 5 / 1;
+       position: relative;
+       display: flex; /* flexbox 적용 */
+       justify-content: center; /* 가로 중앙 정렬 */
+       align-items: center; /* 세로 중앙 정렬 */
+   }
+
+   /* MONEYFLOW STATE */
+   #moneyflow_state {
+       aspect-ratio: 1.02 / 1;
+       text-align: left;
+       position: relative;
+   	   display: flex;
+	   flex-direction: column;  /* 세로로 정렬 */
+	   justify-content: space-between; /* 상단과 하단에 요소 배치 */
+	   height: 100%; /* 자식 요소들이 제대로 배치될 수 있도록 높이를 100%로 설정 */
+   }
+   .moneyflow_td {
+   	   padding-top:7px;
+   }
+   
+   #state_table {
+   	   width: 100%;  /* 테이블이 영역을 다 채우도록 */
+   }
+
+	#input_section {
+	   flex-shrink: 0; /* 입력창은 크기 조정 안 함 */
+	   margin-top: 10px;
 	}
-	.state_list {
-		display:contents;
-		text-align:left;
-	}
-	#state_table {
-		width:90%;
-		margin-left:10px;
-		margin-top:40px;
-	} 
-	.td_left {
-		text-align:left;
-	}
-	.td_right {
-		text-align:right;
-	}
-	#state_title {
-		position: absolute;
-  		display: inline-block;
-	    width:100%;
-	    top:-37px;
-	 	color:#FF3B7C;
-	 	margin-left:6px
-	}
-	.oswald-title {
-	  font-family: "Oswald", sans-serif;
-	  font-optical-sizing: auto;
-	  font-weight: 400;
-	  font-style: normal;
-	  font-size:22px;
-	  color:#FF3B7C;
+
+   /* ACCOUNT STATE */
+   #account_state {
+       width: 40vw;
+       aspect-ratio: 1.2 / 1;
+       text-align: left;
+       position: relative;
+   	   display: flex;
+	   flex-direction: column;  /* 세로로 정렬 */
+	   justify-content: space-between; /* 상단과 하단에 요소 배치 */
+	   height: 100%; /* 자식 요소들이 제대로 배치될 수 있도록 높이를 100%로 설정 */
+   }
+
+   /* CATEGORY STATE */
+   #category_state {
+       width: 40vw;
+       aspect-ratio: 1.2 / 1;
+       text-align: left;
+       position: relative;
+   	   display: flex;
+	   flex-direction: column;  /* 세로로 정렬 */
+	   justify-content: space-between; /* 상단과 하단에 요소 배치 */
+	   height: 100%; /* 자식 요소들이 제대로 배치될 수 있도록 높이를 100%로 설정 */
+   }
+
+   /* 테이블 스타일 */
+   #state_table {
+       width: 90%;
+       margin-left: 10px;
+       margin-top: 30px;
+   }
+   
+   /* 테이블 스타일 */
+   #total_table {
+       width: 80%;
+       margin-top: 20px;
+       margin-bottom:10px;
+       border-collapse : collapse;
+   }
+   
+   .total_font {
+   		font-size: 1.2vw;
+	    font-family: "Gowun Dodum", sans-serif;
+	    font-weight: 400;
+	    font-style: normal;
+   }
+   
+   .font_blue {
+   		color:#215F9A;
+   }
+   .font_red {
+   		color:#C00000;
+   }
+   
+   /* Progress Bar */
+   .progress-bar {
+       width: 100%;
+       height: 10px;
+       background-color: #949494;
+   }
+
+   .progress-bar .progress {
+       height: 10px;
+       text-align: center;
+       background-color: #4F4F4F;
+   }
+   
+   .input-container {
+	    width: 100%; /* 입력창 너비 조정 */
+	    margin-top: 20px;
+	    text-align: left;
+	    margin-left: 10px;
+	    margin-bottom: 7px;
 	}
 	
-	.progress-bar {
-	    width: 100%;
-	    height: 10px;
-	    background-color: #949494;
-	    font-weight: 600;
-	    font-size: .8rem;
+	.input-field {
+	    width: 78%; /* 입력창 너비 조정 */
+	    padding: 5px;
+	    font-size: 16px;
+	    border: none;
+	    background: transparent;
+  		border-bottom: 2px solid #FF3B7C;
 	}
-	.progress-bar .progress {
-	    height: 10px;
-	    padding: 0;
-	    text-align: center;
-	    background-color: #4F4F4F;
-	    color: #111;
-	}
-
 	
-	/*화면크기가 1000px보다 클 때 */
-	@media screen and (min-width:1000px){
-
-		#accountbook_calendar {
-  			display: inline-block;
-			background-color :  #F2F2F2;
-			width : 40vw;
-			aspect-ratio:1.2/1;
-			margin:20px;
-		}
-		
-		#account_state {
-  			display: inline-block;
-			background-color :  #F2F2F2;
-			width : 40vw;
-			aspect-ratio:1.5/1;
-			margin:20px;
-			text-align:left;
-			position:relative;
-		}
-		#category_state {
-			background-color : #F2F2F2;
-			width : 40vw;
-			aspect-ratio:1.2/1;
-			margin:20px;
-			text-align:left;
-			position:relative;
-			top:-90px;
-		}
-		#state_table {
-			width:90%;
-			margin-left:10px;
-			margin-top:30px;
-		} 
+	.input-field:focus {
+	    border-color: #FF3B7C;
+	    outline: none;
+  		border-bottom: spx solid #FF3B7C;
+	}
 	
+	
+	.input-field_sub {
+	    width: 20%; /* 입력창 너비 조정 */
+	    padding: 7px;
+	    font-size: 13px;
+	    border: none;
+	    background: transparent;
+  		border-bottom: 2px solid #ccc;
+    	text-align: right; /* 입력값 오른쪽 정렬 */
 	}
-
-	/*화면크기가 1000px보다 작을 때 */
-	@media screen and (max-width:1000px){
-
-		#accountbook_calendar {
-			background-color : #F2F2F2;
-			width : 90vw;
-			aspect-ratio:1.2/1;
-			margin:20px;
-		}
-
-		#account_state {
-			background-color : #F2F2F2;
-			width : 90vw;
-			aspect-ratio:1.5/1;
-			margin:20px;
-			text-align:left;
-			position:relative;
-		}
-		#state_table {
-			width:90%;
-			margin-left:10px;
-			margin-top:30px;
-		} 
-		#category_state {
-			background-color : #F2F2F2;
-			width : 90vw;
-			aspect-ratio:1.2/1;
-			margin:20px;
-			text-align:left;
-			position:relative;
-		}
-
+	
+	.input-field_sub:focus {
+	    border-color: #ccc;
+	    outline: none;
+  		border-bottom: spx solid #ccc;
 	}
+   	#day-select {
+   		width: 15%; /* 입력창 너비 조정 */
+	    padding: 7px;
+	    font-size: 13px;
+	    border: none;
+    	text-align: center; 
+	    background: transparent;
+  		border-bottom: 2px solid #ccc;
+   	}
+   	
+   	#category-select {
+   		width: 23%; /* 입력창 너비 조정 */
+	    padding: 7px;
+	    font-size: 13px;
+	    border: none;
+    	text-align: center; 
+	    background: transparent;
+  		border-bottom: 2px solid #ccc;
+   	}
+   	#account-select {
+   		width: 23%; /* 입력창 너비 조정 */
+	    padding: 7px;
+	    font-size: 13px;
+	    border: none;
+    	text-align: center; 
+	    background: transparent;
+  		border-bottom: 2px solid #ccc;
+   	}
+   	.check_img, .delete_img {
+		width:25px;
+	 	height:25px;
+   	}
+   	.check_button {
+   		background:url(resources/image/check.png); 
+		width:25px;
+	 	height:25px;
+	 	border:none;
+		vertical-align:middle;
+		cursor:pointer;
+	    background-repeat: no-repeat;
+		background-position:0px 0px;
+		background-size: 100% 100%;
+   	}
+   	
+   	.delete_button {
+   		background:url(resources/image/delete.png); 
+		width:25px;
+	 	height:25px;
+	 	border:none;
+		vertical-align:middle;
+		cursor:pointer;
+	    background-repeat: no-repeat;
+		background-position:0px 0px;
+		background-size: 100% 100%;
+   	}
+   	.input_div {
+   		margin-bottom:7px;
+   	}
+   	.select_div {
+   		margin-left:20px;
+   	}
+   /* 반응형 스타일 (1000px 이하) */
+   @media screen and (max-width: 1000px) {
+       #accountbook_main {
+           flex-direction: column; /* 세로 정렬 */
+           align-items: center; /* 중앙 정렬 */
+       }
+
+       #total_moneyflow_wrapper {
+           flex-direction: column;
+           width: 90vw;
+       }
+
+       #accountbook_calendar,
+       #total_state,
+       #moneyflow_state,
+       #account_state,
+       #category_state {
+           width: 90vw; /* 모바일에서는 전체 너비 사용 */
+       }
+       
+  	  .total_font {
+   		   font-size: 16px;
+	       font-family: "Gowun Dodum", sans-serif;
+	       font-weight: 400;
+	       font-style: normal;
+	       vertical-align:middle;
+   }
+       /* 테이블 스타일 */
+       #total_table {
+           width: 80%;
+           margin-top: 20px;
+           margin-bottom:10px;
+           border-collapse : collapse;
+   }
+   
+   
+}
 </style>
+
 <body>
 <div id="accountbook_main">
-	<div id="accountbook_calendar">
-		<div>
-			<span class="oswald-title">
-				3
-			</span>
-			<span>
-				march
-			</span>
-		</div>
-		<p class="kor_font"> 달력 영역 입니다.</p>
-	</div>
-	<div id="account_state">
-		<div class="state_title">
-			<p class="oswald-title">
-				ACCOUNT  STATE !
-			</p>
-		</div>
-		<table id="state_table">
-			<tr>
-				<td class="td_left" width="25%">
-					<p  class="kor_font">  ■ 신한카드 </p>
-				</td>
-				<td class="td_left" >
-					<p  class="kor_font"> 76,000 원  /  150,000 원 </p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-				</td>
-				<td>
-					<div class="progress-bar">
-						<div class="progress" style="width:51%">
-						</div>
-					</div>
-				</td>
-			</tr>
-		</table>
-	</div>
-	
-	<div id="account_state">
-		<div class="state_title">
-			<p class="oswald-title">
-				INCOME & EXPENDITURE !
-			</p>
-		</div>
-		<table id="state_table">
-			<tr>
-				<td class="td_left" width="25%">
-					<p  class="kor_font">  ■ 신한카드 </p>
-				</td>
-				<td class="td_left" >
-					<p  class="kor_font"> 76,000 원  /  150,000 원 </p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-				</td>
-				<td>
-					<div class="progress-bar">
-						<div class="progress" style="width:51%">
-						</div>
-					</div>
-				</td>
-			</tr>
-		</table>
-	</div>
-	
-	
-	<div id="category_state">
-		<div class="state_title">
-			<p class="oswald-title">
-				CATEGORY  STATE !
-			</p>
-		</div>
-		<table id="state_table">
-			<tr>
-				<td class="td_left" width="25%">
-					<p  class="kor_font">  ■ 식비 </p>
-				</td>
-				<td class="td_left" >
-					<p  class="kor_font"> 36,000 원  /  100,000 원 </p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-				</td>
-				<td>
-					<div class="progress-bar">
-						<div class="progress" style="width:36%">
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td class="td_left" width="25%">
-					<p  class="kor_font">  ■ 쇼핑 </p>
-				</td>
-				<td class="td_left" >
-					<p  class="kor_font"> 40,000 원  /  50,000 원 </p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-				</td>
-				<td>
-					<div class="progress-bar">
-						<div class="progress" style="width:80%">
-						</div>
-					</div>
-				</td>
-			</tr>
-		</table>
-	</div>
+   <!-- 캘린더 -->
+   <div id="accountbook_calendar">
+      <div>
+         <span class="oswald-title">
+            3
+         </span>
+         <span>
+            march
+         </span>
+      </div>
+      <p class="kor_font"> 달력 영역 입니다.</p>
+   </div>
+   
+   <!-- 토탈 상태와 머니플로우 상태 세로 정렬 -->
+   <div id="total_moneyflow_wrapper">
+      <!-- Total State -->
+      <div id="total_state">
+         <div class="state_title">
+            <p class="oswald-title">
+               TOTAL STATE !
+            </p>
+         </div>
+         <table id="total_table">
+         	<tr class="">
+         		<td class="td_left total_table_td_title">
+         			<p class="total_font"> <span style="font-size:10px">▶</span> Today </p>
+         		</td>
+         		<td class="total_table_td td_left">
+         			<p class="total_font font_red"> + 700,000 원 </p>
+         		</td>
+         		<td class="total_table_td td_left">
+         			<p class="total_font font_blue"> - 780,000 원 </p>
+         		</td>
+         	</tr>
+         	<tr class="">
+         		<td class="td_left total_table_td_title">
+         			<p class="total_font"> <span style="font-size:10px">▶</span> This Month </p>
+         		</td>
+         		<td class="total_table_td td_left">
+         			<p class="total_font font_red"> + 1,210,000 원 </p>
+         		</td>
+         		<td class="total_table_td td_left">
+         			<p class="total_font font_blue"> - 800,000 원 </p>
+         		</td>
+         	</tr>
+         	<tr class="">
+         		<td class="td_left total_table_td_title">
+         			<p class="total_font"> <span style="font-size:10px">▶</span> Budget </p>
+         		</td>
+         		<td class="total_table_td" colspan= "2">
+         			<p class="total_font"> 1,700,000 원 </p>
+         		</td>
+         	</tr>
+         </table>
+      </div>
+   
+      <!-- Moneyflow State -->
+      <div id="moneyflow_state">
+         <div class="state_title">
+            <p class="oswald-title">
+               INCOME & EXPENDITURE !
+            </p>
+         </div>
+         <table id="state_table">
+            <tr>
+               <td class="td_left moneyflow_td" width="33%">
+                  <p class="kor_font"> ■ 월급 | 기업은행 </p>
+               </td>
+               <td class="td_left moneyflow_td" width="30%">
+                  <p class="kor_font"> 3월 급여 </p>
+               </td>
+               <td class="td_right moneyflow_td">
+                  <p class="kor_font font_red"> + 3,700,000 원 </p>
+               </td>
+            </tr>
+            <tr>
+               <td class="td_left moneyflow_td" width="38%">
+                  <p class="kor_font"> ■ 간식 | 신한카드 </p>
+               </td>
+               <td class="td_left moneyflow_td" width="35%">
+                  <p class="kor_font"> 오늘의 간식 </p>
+               </td>
+               <td class="td_right moneyflow_td">
+                  <p class="kor_font font_blue"> - 24,000 원 </p>
+               </td>
+            </tr>
+         </table>
+               	      <!-- 입력창 추가 -->
+	      <div class="input-container">
+	      
+	      	<form>
+				<div class="input_div">
+			        <label for="account-input" class="kor_font">■ </label>
+			        <input type="text" id="account-input" class="input-field kor_font" placeholder="수입/지출 등록...">
+			        <input class="check_button" type="submit" value="">
+			        <input class="delete_button" type="submit" value="">
+		      	</div>		      	
+		      	<div class="select_div">
+			        <label for="category-select" class="kor_font">Category | </label>
+					<select id="category-select">
+					    <option value="">카테고리 선택</option>
+					</select>
+					
+					<script>
+					    const category_sel = document.getElementById("category-select");
+					    
+					    for (let i = 1; i <= 31; i++) {
+					        let option = document.createElement("option");
+					        option.value = i;
+					        option.textContent = i;
+					        category_sel.appendChild(option);
+					    }
+					</script>
+		      	</div>		      	
+		      	<div class="select_div">
+			        <label for="account-select" class="kor_font">Account | </label>
+					<select id="account-select">
+					    <option value="">계정 선택</option>
+					</select>
+					
+					<script>
+					    const account_sel = document.getElementById("account-select");
+					    
+					    for (let i = 1; i <= 31; i++) {
+					        let option = document.createElement("option");
+					        option.value = i;
+					        option.textContent = i;
+					        account_sel.appendChild(option);
+					    }
+					</script>
+		      	</div>
+		      	
+		      	<div class="select_div">
+			        <label for="budget-input" class="kor_font">Price |  </label>
+			        <input type="text" id="budget-input" class="input-field_sub kor_font" placeholder="숫자만 입력" oninput="formatNumber(this)" />
+			        <label for="budget-input" class="kor_font">원</label>
+					<script>
+					function formatNumber(input) {
+					    let value = input.value.replace(/[^0-9]/g, ""); // 숫자만 남김
+					    if (value === "") {
+					        input.value = ""; // 빈 값이면 그대로 유지
+					        return;
+					    }
+					
+					    // 세 자리마다 콤마 추가
+					    value = new Intl.NumberFormat().format(value);
+					
+					    // 입력창에 반영
+					    input.value = value;
+					}
+					</script>
+		      	</div>
 
+	      	</form>
+
+	      </div>
+      </div>
+
+   </div>
+
+   <!-- Account State -->
+   <div id="account_state">
+      <div class="state_title">
+         <p class="oswald-title">
+            ACCOUNT STATE !
+         </p>
+      </div>
+      <table id="state_table">
+         <tr>
+            <td class="td_left" width="25%">
+               <p class="kor_font"> ■ 신한카드 </p>
+            </td>
+            <td class="td_left">
+               <p class="kor_font"> 76,000 원  /  150,000 원 </p>
+            </td>
+         </tr>
+         <tr>
+            <td></td>
+            <td>
+               <div class="progress-bar">
+                  <div class="progress" style="width:51%"></div>
+               </div>
+            </td>
+         </tr>
+      </table>
+      
+	      <!-- 입력창 추가 -->
+	      <div class="input-container">
+	      
+	      	<form>
+				<div class="input_div">
+			        <label for="account-input" class="kor_font">■ </label>
+			        <input type="text" id="account-input" class="input-field kor_font" placeholder="계정 등록...">
+			        <input class="check_button" type="submit" value="">
+			        <input class="delete_button" type="submit" value="">
+		      	</div>
+		      	
+		      	<div class="select_div">
+			        <label for="budget-input" class="kor_font">Budget |  </label>
+			        <input type="text" id="budget-input" class="input-field_sub kor_font" placeholder="숫자만 입력" oninput="formatNumber(this)" />
+			        <label for="budget-input" class="kor_font">원</label>
+					<script>
+					function formatNumber(input) {
+					    let value = input.value.replace(/[^0-9]/g, ""); // 숫자만 남김
+					    if (value === "") {
+					        input.value = ""; // 빈 값이면 그대로 유지
+					        return;
+					    }
+					
+					    // 세 자리마다 콤마 추가
+					    value = new Intl.NumberFormat().format(value);
+					
+					    // 입력창에 반영
+					    input.value = value;
+					}
+					</script>
+		      	</div>
+		      	
+		      	<div class="select_div">
+			        <label for="day-select" class="kor_font">RepaymentDate |  매월</label>
+					<select id="day-select">
+					    <option value="">날짜 선택</option>
+					</select>
+					
+					<script>
+					    const select = document.getElementById("day-select");
+					    
+					    for (let i = 1; i <= 31; i++) {
+					        let option = document.createElement("option");
+					        option.value = i;
+					        option.textContent = i;
+					        select.appendChild(option);
+					    }
+					</script>
+			        <label for="day-select" class="kor_font"> 일 </label>
+		      	</div>
+	      	</form>
+
+	      </div>
+   </div>
+
+   <!-- Category State -->
+   <div id="category_state">
+      <div class="state_title">
+         <p class="oswald-title">
+            CATEGORY STATE !
+         </p>
+      </div>
+      <table id="state_table">
+         <tr>
+            <td class="td_left" width="25%">
+               <p class="kor_font"> ■ 식비 </p>
+            </td>
+            <td class="td_left">
+               <p class="kor_font"> 36,000 원  /  100,000 원 </p>
+            </td>
+         </tr>
+         <tr>
+            <td></td>
+            <td>
+               <div class="progress-bar">
+                  <div class="progress" style="width:36%"></div>
+               </div>
+            </td>
+         </tr>
+         <tr>
+            <td class="td_left" width="25%">
+               <p class="kor_font"> ■ 쇼핑 </p>
+            </td>
+            <td class="td_left">
+               <p class="kor_font"> 40,000 원  /  50,000 원 </p>
+            </td>
+         </tr>
+         <tr>
+            <td></td>
+            <td>
+               <div class="progress-bar">
+                  <div class="progress" style="width:80%"></div>
+               </div>
+            </td>
+         </tr>
+      </table>
+      	      <!-- 입력창 추가 -->
+	      <div class="input-container">
+	      
+	      	<form>
+				<div class="input_div">
+			        <label for="account-input" class="kor_font">■ </label>
+			        <input type="text" id="account-input" class="input-field kor_font" placeholder="카테고리 등록...">
+			        <input class="check_button" type="submit" value="">
+			        <input class="delete_button" type="submit" value="">
+		      	</div>
+		      	
+		      	<div  class="select_div">
+			        <label for="budget-input" class="kor_font">Budget |  </label>
+			        <input type="text" id="budget-input" class="input-field_sub kor_font" placeholder="숫자만 입력" oninput="formatNumber(this)" />
+			        <label for="budget-input" class="kor_font">원</label>
+					<script>
+					function formatNumber(input) {
+					    let value = input.value.replace(/[^0-9]/g, ""); // 숫자만 남김
+					    if (value === "") {
+					        input.value = ""; // 빈 값이면 그대로 유지
+					        return;
+					    }
+					
+					    // 세 자리마다 콤마 추가
+					    value = new Intl.NumberFormat().format(value);
+					
+					    // 입력창에 반영
+					    input.value = value;
+					}
+					</script>
+		      	</div>
+	      	</form>
+
+	      </div>
+   </div>
 </div>
-
 </body>
-
 </html>
