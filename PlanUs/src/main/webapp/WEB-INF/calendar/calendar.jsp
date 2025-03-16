@@ -15,7 +15,7 @@
 	}
 	#calendar{
          width : 90vw;
-         height : 700px;
+         height : 900px;
          aspect-ratio:1.2/1;
          margin:20px;
 	} 
@@ -35,12 +35,26 @@
 	}
 	#day{
 		width : 100%;
-		height : 630px;
+		height : 830px;
 		margin : auto;
 		text-align : center;
 		background-color : #F2F2F2;
 	}
-	
+	#calendar_table{
+		width : 100%;
+		height : 100%;
+		table-layout: fixed;
+		border : 1px solid white;
+		border-collapse: collapse;
+	}
+	#calendar_table td{
+		text-align : left;
+		vertical-align: top;
+	}
+	.cal_top{
+		color : white;
+		background-color: #363636;
+	}
 	/*화면크기가 1000px보다 클 때 */
    @media screen and (min-width:1000px){
 		#calendar{
@@ -114,6 +128,28 @@
    }
 </style>
 
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		date = new Date(); // 현재 날짜(로컬 기준)
+		utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000); // uct 표준시 도출
+		kstGap = 9 * 60 * 60 * 1000; // 한국 kst 기준시간 더하기
+		today = new Date(utc + kstGap); // 한국 시간으로 date 객체 만들기(오늘)
+		
+		var year = <%=request.getParameter("year")%>
+		var month = <%=request.getParameter("month")%>
+		var day = <%=request.getParameter("day")%>
+		
+		var selectDate = new Date(year, month-1, day);
+		
+		calendarInit(selectDate);
+	})
+	
+	function getDate(date){
+		
+	}
+</script>
+
 <div id = "calendar_main">
 	<table id = "calendar">
 		<tr>
@@ -128,7 +164,71 @@
 		<tr>
 			<td>
 				<div id = "day">
-					<span class = "kor_font">happy 달력 영역</span>
+					<table id = "calendar_table">
+						<tr class = "oswald-menu cal_top">
+							<th>SUN</th>
+							<th>MON</th>
+							<th>TUE</th>
+							<th>WED</th>
+							<th>THU</th>
+							<th>FRI</th>
+							<th>SAT</th>
+						</tr>
+						<tr class = "kor_font">
+							<td>1</td>
+							<td>2</td>
+							<td>3</td>
+							<td>4</td>
+							<td>5</td>
+							<td>6</td>
+							<td>7</td>
+						</tr>
+						<tr  class = "kor_font">
+							<td>8</td>
+							<td>9</td>
+							<td>10</td>
+							<td>11</td>
+							<td>12</td>
+							<td>13</td>
+							<td>14</td>
+						</tr>
+						<tr  class = "kor_font">
+							<td>15</td>
+							<td>16</td>
+							<td>17</td>
+							<td>18</td>
+							<td>19</td>
+							<td>20</td>
+							<td>21</td>
+						</tr>
+						<tr  class = "kor_font">
+							<td>22</td>
+							<td>23</td>
+							<td>24</td>
+							<td>25</td>
+							<td>26</td>
+							<td>27</td>
+							<td>28</td>
+						</tr>
+						<tr  class = "kor_font">
+							<td>29</td>
+							<td>30</td>
+							<td>31</td>
+							<td>32</td>
+							<td>33</td>
+							<td>34</td>
+							<td>35</td>
+						</tr>
+						<tr  class = "kor_font">
+							<td>36</td>
+							<td>37</td>
+							<td>38</td>
+							<td>39</td>
+							<td>40</td>
+							<td>41</td>
+							<td>42</td>
+						</tr>
+					</table>
 				</div>
 			</td>
 		</tr>
