@@ -288,13 +288,27 @@
 				</td>
 				<td>
 					<table style="float:right">
-						<tr>
-							<td>
+						<!--  <tr>
+							  <td>
 									<img id="user_img" src = "resources/image/user_img.png" alt="image"/>
 							</td>
 							<td>
 								<a href = "" class="oswald-menu">
 									seul222
+								</a>
+							</td>
+						</tr>
+						-->
+						<tr>
+							  <td>
+								<a href = "login.users" class="oswald-menu">
+									Login
+								</a>
+								|
+							</td>
+							<td>
+								<a href = "join.users" class="oswald-menu">
+									Join
 								</a>
 							</td>
 						</tr>

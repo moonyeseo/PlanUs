@@ -10,12 +10,12 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import groups.model.groupsDao;
 import users.model.usersDao;
 
 @Controller
@@ -27,7 +27,13 @@ public class usersController {
 
 	@Autowired
 	usersDao uDao;
-
+	
+	@RequestMapping("login.users")
+    public String login(Model model){
+        model.addAttribute("data","회원 가입하시오");
+        return "login";
+    }
+	
 	@RequestMapping(value = Command, method = RequestMethod.POST)
 	public ModelAndView start(
 			@RequestParam(value = "U_CD", required = false) String U_CD,
