@@ -13,6 +13,6 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
-	<context:component-scan base-package="accountbook" />
+	<context:component-scan base-package="accountbook.controller account.model" />
 
 </beans>

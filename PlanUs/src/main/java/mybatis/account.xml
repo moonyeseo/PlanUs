@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace = "account.accountBean">
+  	<select id="getAccountList" resultType="account.model.accountBean">
+  		select * from account order by a_cd
+  	</select>
+  	
+  	<select id="insertAccount">
+  		insert into account values (
+  			(select 'A' || lpad(to_number(substr(max(a_cd),2,10)) + 1,9,'0') from account)
+  			, 'U000000001', #{a_name}, 0, #{a_asset}, #{a_repaymentdate}
+  		)
+  	</select>
+  </mapper>

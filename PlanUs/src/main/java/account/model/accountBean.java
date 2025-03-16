@@ -6,6 +6,7 @@ public class accountBean {
 	private String a_name;
 	private float a_state;
 	private float a_asset;
+	private String a_repaymentdate;
 
 	public String getA_cd() {
 		return a_cd;
@@ -36,6 +37,12 @@ public class accountBean {
 	}
 	public void setA_asset(float a_asset) {
 		this.a_asset = a_asset;
+	}
+	public String getA_repaymentdate() {
+		return a_repaymentdate;
+	}
+	public void setA_repaymentdate(String a_repaymentdate) {
+		this.a_repaymentdate = a_repaymentdate;
 	}
 	
 }

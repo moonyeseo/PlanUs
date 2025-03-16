@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@include file="../common/mainMenu.jsp"%>
 <html>
 <head>
@@ -46,6 +49,7 @@
    #accountbook_calendar {
        width: 40vw;
        aspect-ratio: 0.8 / 1;
+       z-index:-1;
    }
 
    /* TOTAL STATE */
@@ -72,7 +76,8 @@
    	   padding-top:7px;
    }
    
-   #state_table {
+   #state_table,
+   #account_table {
    	   width: 100%;  /* 테이블이 영역을 다 채우도록 */
    }
 
@@ -80,7 +85,10 @@
 	   flex-shrink: 0; /* 입력창은 크기 조정 안 함 */
 	   margin-top: 10px;
 	}
-
+	.account_table_div {
+	   max-height: 400px; /* 원하는 높이로 조절 */
+       overflow-y: auto; /* 세로 스크롤 추가 */
+	}
    /* ACCOUNT STATE */
    #account_state {
        width: 40vw;
@@ -106,10 +114,12 @@
    }
 
    /* 테이블 스타일 */
-   #state_table {
+   #state_table,
+   #account_table {
        width: 90%;
        margin-left: 10px;
        margin-top: 30px;
+       overflow: auto;
    }
    
    /* 테이블 스타일 */
@@ -145,6 +155,7 @@
        height: 10px;
        text-align: center;
        background-color: #4F4F4F;
+       transition: width 0.3s ease-in-out;
    }
    
    .input-container {
@@ -247,6 +258,12 @@
    	.select_div {
    		margin-left:20px;
    	}
+   	.moneyflow_radio {
+   		width:10px;
+   		height:10px;
+   		accent-color:#FF3B7C;
+   	}
+   	
    /* 반응형 스타일 (1000px 이하) */
    @media screen and (max-width: 1000px) {
        #accountbook_main {
@@ -265,6 +282,7 @@
        #account_state,
        #category_state {
            width: 90vw; /* 모바일에서는 전체 너비 사용 */
+       	   z-index:-1;
        }
        
   	  .total_font {
@@ -421,9 +439,15 @@
 		      	</div>
 		      	
 		      	<div class="select_div">
-			        <label for="budget-input" class="kor_font">Price |  </label>
-			        <input type="text" id="budget-input" class="input-field_sub kor_font" placeholder="숫자만 입력" oninput="formatNumber(this)" />
-			        <label for="budget-input" class="kor_font">원</label>
+			        <label for="money_flow_budget" class="kor_font">Price |  </label>
+			        <input type="text" id="money_flow_budget" class="input-field_sub kor_font" placeholder="숫자만 입력" oninput="formatNumber(this)" />
+			        <label for="money_flow_budget" class="kor_font">원 | </label>
+			        <label class="kor_font">
+			        	<input class="moneyflow_radio" type="radio" value="1" name="in_out" checked> 수입
+			        </label>
+			        <label class="kor_font">
+			        	<input class="moneyflow_radio kor_font" type="radio" value="2" name="in_out"> 지출
+			        </label>
 					<script>
 					function formatNumber(input) {
 					    let value = input.value.replace(/[^0-9]/g, ""); // 숫자만 남김
@@ -455,39 +479,65 @@
             ACCOUNT STATE !
          </p>
       </div>
-      <table id="state_table">
-         <tr>
-            <td class="td_left" width="25%">
-               <p class="kor_font"> ■ 신한카드 </p>
-            </td>
-            <td class="td_left">
-               <p class="kor_font"> 76,000 원  /  150,000 원 </p>
-            </td>
-         </tr>
-         <tr>
-            <td></td>
-            <td>
-               <div class="progress-bar">
-                  <div class="progress" style="width:51%"></div>
-               </div>
-            </td>
-         </tr>
-      </table>
+      <div class="account_table_div">
+	      <table id="account_table">
+	      	<c:forEach var="a_list" items="${accountList}" varStatus="loop">
+		         <tr>
+		            <td class="td_left" width="25%">
+		               <p class="kor_font"> ■ ${a_list.a_name} </p>
+		            </td>
+		            <td class="td_left">
+		               <p class="kor_font"> 
+		               		<fmt:formatNumber value="${a_list.a_state}" pattern="###,###,### 원"/>  /  
+		               		<fmt:formatNumber value="${a_list.a_asset}" pattern="###,###,### 원"/> 
+		               </p>
+		            </td>
+		         </tr>
+		         <tr>
+		            <td></td>
+		            <td>
+		               <div class="progress-bar">
+		                  <div class="progress" id="a_progress_${loop.index}" style="width:0%"></div>
+		                  <script>
+						    // JavaScript에서 값 가져오기
+						    let a_state_${loop.index} = ${a_list.a_state};
+						    let a_asset_${loop.index} = ${a_list.a_asset};
+						    
+						    if(a_asset_${loop.index} == 0) {
+						    	progressBar_${loop.index}.style.width = 0 + "%";
+						    } else {
+							    // 비율 계산
+							    let percentage_${loop.index} = (a_state_${loop.index} / a_asset_${loop.index}) * 100;
+							    
+							    // width 적용
+							    let progressBar_${loop.index} = document.getElementById("a_progress_${loop.index}");
+							    if(progressBar_${loop.index}){
+							    	progressBar_${loop.index}.style.width = percentage_${loop.index} + "%";
+							    }
+						    }
+						
+						   </script>
+		               </div>
+		            </td>
+		         </tr>
+	      	</c:forEach>
+	      </table>
+      </div>
       
 	      <!-- 입력창 추가 -->
 	      <div class="input-container">
 	      
-	      	<form>
+	      	<form:form id="account_form" commandName="account" action="insertaccount.accountbook" method="post">
 				<div class="input_div">
 			        <label for="account-input" class="kor_font">■ </label>
-			        <input type="text" id="account-input" class="input-field kor_font" placeholder="계정 등록...">
+			        <input type="text" id="account-input" class="input-field kor_font" placeholder="계정 등록..." name="a_name">
 			        <input class="check_button" type="submit" value="">
 			        <input class="delete_button" type="submit" value="">
 		      	</div>
 		      	
 		      	<div class="select_div">
-			        <label for="budget-input" class="kor_font">Budget |  </label>
-			        <input type="text" id="budget-input" class="input-field_sub kor_font" placeholder="숫자만 입력" oninput="formatNumber(this)" />
+			        <label for="account_budget" class="kor_font">Budget |  </label>
+			        <input type="text" id="account_budget" class="input-field_sub kor_font" placeholder="숫자만 입력" oninput="formatNumber(this)"  name="a_asset"/>
 			        <label for="budget-input" class="kor_font">원</label>
 					<script>
 					function formatNumber(input) {
@@ -503,12 +553,21 @@
 					    // 입력창에 반영
 					    input.value = value;
 					}
+				    // 폼 제출 전에 콤마 제거
+				    document.getElementById("account_form").addEventListener("submit", function(event) {
+				        var assetInput = document.getElementById("account_budget");
+				        
+				        // 입력값에서 콤마 제거
+				        var assetValue = assetInput.value.replace(/,/g, "");
+				        
+				        // 콤마가 제거된 값을 input의 value에 다시 설정
+				        assetInput.value = assetValue;
+				    });
 					</script>
 		      	</div>
-		      	
 		      	<div class="select_div">
 			        <label for="day-select" class="kor_font">RepaymentDate |  매월</label>
-					<select id="day-select">
+					<select id="day-select" name="a_repaymentdate">
 					    <option value="">날짜 선택</option>
 					</select>
 					
@@ -524,7 +583,7 @@
 					</script>
 			        <label for="day-select" class="kor_font"> 일 </label>
 		      	</div>
-	      	</form>
+	      	</form:form>
 
 	      </div>
    </div>
