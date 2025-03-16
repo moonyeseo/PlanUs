@@ -39,6 +39,7 @@
 	  font-family: "Gowun Dodum", sans-serif;
 	  font-weight: 400;
 	  font-style: normal;
+      font-size:14px;
 	}
 	#main_menu {
 	 	height : 110px;
