@@ -1,6 +1,6 @@
 package calendar.model;
 
-public class calendarBean {
+public class CalendarBean {
 	private String c_cd; // PK
 	private String u_cd; // user FK
 	private String r_cd; // repeat FK

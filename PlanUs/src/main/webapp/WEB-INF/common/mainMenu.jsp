@@ -209,6 +209,20 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
+	// 달력
+	date = new Date(); // 현재 날짜(로컬 기준)
+	utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000); // uct 표준시 도출
+	kstGap = 9 * 60 * 60 * 1000; // 한국 kst 기준시간 더하기
+	today = new Date(utc + kstGap); // 한국 시간으로 date 객체 만들기(오늘)
+		
+	var year = today.getFullYear();
+	var month = today.getMonth()+1;
+	var day = today.getDate();
+	
+	$(".go_calendar").click(function(){
+		location.href = "go.calendar?year=" + year + "&month=" + month + "&day=" + day;
+	});
+	  
     // 햄버거 버튼 클릭 이벤트 
     var burger = $('.menu-trigger');
 
@@ -289,7 +303,7 @@
 			</tr>
 			<tr>
 				<td>
-					<a id = "menu_calendar" class = "menu_list oswald-menu" href = "go.calendar">
+					<a id = "menu_calendar" class = "menu_list oswald-menu go_calendar" href = "javascript:void(0);">
 						CALENDAR
 					</a>
 				</td>
@@ -325,7 +339,7 @@
 	<div id="toggle_menu">
 		<ul id="toggle_list">
 			<li>
-				<a class = "oswald-menu" href = "go.calendar">
+				<a class = "oswald-menu go_calendar"  href = "javascript:void(0);">
 					CALENDAR
 				</a>
 			</li>
