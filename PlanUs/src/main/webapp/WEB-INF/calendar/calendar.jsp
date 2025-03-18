@@ -63,7 +63,7 @@
 		display: flex;
 		flex-flow: wrap;
 		width : 100%;
-		height : 720px;
+		height : 730px;
 	}
 	/* 날짜 */
 	.day {
@@ -109,10 +109,14 @@
 	.cal_top th{
 	 	border: 1px solid white; 
 	}
+	/* 오늘 날짜 배경색 변경 */
+	.today{
+	    background-color : #DEDEDE;
+	}
 	/* 선택된 날짜 핑크 테두리 */
-	.current.today {
+	.current.selectday{
 	    border: 3px solid  #FF3B7C; 
-	    box-sizing: border-box;
+	    box-sizing: border-box; 
 	}
 	
 	/************* TO-DO ***************/
@@ -326,21 +330,23 @@
 			}
 
 			// 오늘 날짜 표기
+			var currentMonthDate = document
+						.querySelectorAll('.dates .current');
+			
 			if (today.getMonth() == currentMonth) {
 				todayDate = today.getDate();
+
+				currentMonthDate[today.getDate() - 1].classList.add('today');
 				
 				if(todayDate != thisMonth.getDate()){
 					todayDate = thisMonth.getDate();
 				}
 				
-				var currentMonthDate = document
-						.querySelectorAll('.dates .current');
-				currentMonthDate[todayDate - 1].classList.add('today');
+				currentMonthDate[todayDate - 1].classList.add('selectday');
 			}
 			else{
-					var currentMonthDate = document
-					.querySelectorAll('.dates .current');
-			currentMonthDate[thisMonth.getDate() - 1].classList.add('today');
+				
+				currentMonthDate[thisMonth.getDate() - 1].classList.add('selectday');
 			}
 			
 		}
@@ -405,9 +411,6 @@
 	         			</td>
 	         		</tr>
 	         </table>
-	         
-	         <!-- 입력창 추가 -->
-	         
 		</div>
 	</div>
 	
