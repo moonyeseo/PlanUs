@@ -333,10 +333,16 @@
 			var currentMonthDate = document
 						.querySelectorAll('.dates .current');
 			
+			if(today.getFullYear() == currentYear){
+				if (today.getMonth() == currentMonth) {
+					todayDate = today.getDate();
+					currentMonthDate[today.getDate() - 1].classList.add('today');
+					
+				}
+			}
+			
 			if (today.getMonth() == currentMonth) {
 				todayDate = today.getDate();
-
-				currentMonthDate[today.getDate() - 1].classList.add('today');
 				
 				if(todayDate != thisMonth.getDate()){
 					todayDate = thisMonth.getDate();
