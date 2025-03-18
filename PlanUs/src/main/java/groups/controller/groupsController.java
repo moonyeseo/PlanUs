@@ -18,18 +18,11 @@ import org.springframework.web.servlet.ModelAndView;
 import groups.model.groupsDao;
 
 @Controller
-
 public class groupsController {
-	@RequestMapping("temp.groups")
-	public String doAction() {
 
-		return "temp_groups";
-	}
-		
-
-	private final String Command1 = "/1.gropus";
-	 
-	final String getPage = "groupsHome";  // CLUB(GROUPS)page.
+	private final String Command1 = "/go.groups";
+	
+	final String getPage = "clubHome";  // CLUB(GROUPS)page.
 
 //	final String gotoPage = "redirect:/home.student";  // 홈 페이지로 리디렉션
 //	final String checkOutPage = "redirect:/login.in";  // 로그인 페이지로 리디렉션
@@ -37,8 +30,8 @@ public class groupsController {
 
 	@Autowired
 	groupsDao gDao;
-
-	@RequestMapping(value = Command1, method = RequestMethod.POST)
+	
+	@RequestMapping(value = Command1, method = RequestMethod.GET)
 	public ModelAndView start(
 			@RequestParam(value = "U_CD", required = false) String U_CD,
 			@RequestParam(value = "U_ID", required = false) String U_ID,

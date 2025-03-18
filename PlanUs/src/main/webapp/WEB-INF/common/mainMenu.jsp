@@ -327,7 +327,7 @@
 					</a>
 				</td>
 				<td>
-					<a class = "menu_list oswald-menu" href = "">
+					<a class = "menu_list oswald-menu" href = "go.groups">
 						CLUB
 					</a>
 				</td>
@@ -363,7 +363,7 @@
 				</a>
 			</li>
 			<li>
-				<a class = "oswald-menu" href = "">
+				<a class = "oswald-menu" href = "go.groups">
 					CLUB
 				</a>
 			</li>
