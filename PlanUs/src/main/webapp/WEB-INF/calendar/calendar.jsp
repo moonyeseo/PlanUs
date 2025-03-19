@@ -119,12 +119,197 @@
 	    box-sizing: border-box; 
 	}
 	
-	/************* TO-DO ***************/
-	/* TO-DO table */
-	#to-do_table td{
+	/************* TO-DO, SCHEDULE ***************/
+	/* table */
+	#to-do_table,
+	#to-do_table_input,
+	#schedule_table,
+	#schedule_table_input,
+	#diary_table {
+   	   width: 100%;  /* 테이블이 영역을 다 채우도록 */
+		padding-left : 20px;
+   }
+	#input_section {
+	   flex-shrink: 0; /* 입력창은 크기 조정 안 함 */
+	   margin-top: 10px;
+	}
+	.to-do_table_div,
+	.schedule_table_div,
+	.diary_table_div{
+		margin-top : 30px;
+		max-height: 400px; /* 원하는 높이로 조절 */
+	    overflow-y: auto; /* 세로 스크롤 추가 */
+	    text-align: left;
+	}
+	#to-do_table td,
+	#to-do_table_input td,
+	#schedule_table td,
+	#schedule_table_input td{
 		text-align: left;
 		padding-bottom : 10px;
 	}
+	#to-do_table td:nth-child(1),
+	#to-do_table_input td:nth-child(1),
+	#schedule_table td:nth-child(1),
+	#schedule_table_input td:nth-child(1){
+		width : 20px;
+	}
+	#to-do{
+		position: relative; /* 부모 요소 */
+    	height: 100%;
+	}
+	
+	/*TO-DO checkbox*/
+	.to-do_checkbox{
+	 	appearance: none; /* 기본(네이티브) 모양을 제거 */
+	    box-sizing: border-box;
+	    border : 1px solid #FF3B7C;
+		width : 15px;
+		height : 15px;
+    	cursor: pointer;
+    	background-color: transparent;
+	}
+	.to-do_checkbox:checked{
+	    border-color: #FF3B7C;
+	    background-color: #FF3B7C;
+	}
+	
+	/*요일 반복 checkbox*/
+	.select_checkbox{
+	 	appearance: none; /* 기본(네이티브) 모양을 제거 */
+	    box-sizing: border-box;
+	    border : 1px solid #363636;
+		width : 10px;
+		height : 10px;
+    	cursor: pointer;
+    	background-color: transparent;
+	}
+	.select_checkbox:checked{
+	    border-color: #363636;
+	    background-color: #363636;
+	}
+
+	/************* DIARY ***************/
+	#diary_table td{
+		text-align: left;
+	}
+	#diary_title{
+		font-size : 20px;
+	}
+	#diary_underline{
+		margin-top : 7px;
+		margin-bottom : 7px;
+		width : 90%;
+		margin-left : 0;
+		border : 0px;
+		border-top : 3px solid #FF3B7C;
+	}
+	/*************  수정, 삭제 버튼 ***************/
+	.diary_btn_div{
+	    position: absolute;
+	    bottom: 20; /* 부모 요소의 가장 아래쪽에 위치 */
+	    right: 20;
+	}
+	.btn{
+		border : none;
+		background-color : #FF3B7C;
+		color : white;
+		margin-left : 7px;
+		width : 80px;
+		height : 35px;
+		font-size : 17px;
+	}
+	
+	/************* 입력창 ***************/
+	.input-container {
+	    position: absolute;
+	    bottom: 0; /* 부모 요소의 가장 아래쪽에 위치 */
+	    left: 0;
+	    width: 100%; /* 입력창 너비 조정 */
+	    margin-top: 20px;
+	    text-align: left;
+	    margin-bottom: 7px;
+	    margin-left : 3.5px;
+	}
+	#memo_input{
+		width: 50%; /* 입력창 너비 조정 */
+	    padding: 5px;
+	    font-size: 10px;
+	    border: none;
+	    background: transparent;
+  		border-bottom: 2px solid #363636;
+	}
+	.input-field {
+	    width: 78%; /* 입력창 너비 조정 */
+	    padding: 5px;
+	    font-size: 16px;
+	    border: none;
+	    background: transparent;
+  		border-bottom: 2px solid #FF3B7C;
+	}
+	.input-field:focus {
+	    border-color: #FF3B7C;
+	    outline: none;
+  		border-bottom: spx solid #FF3B7C;
+	}
+	.input-field_sub {
+	    width: 60%; /* 입력창 너비 조정 */
+	    padding: 7px;
+	    font-size: 13px;
+	    border: none;
+	    background: transparent;
+  		border-bottom: 2px solid #ccc;
+    	text-align: left; /* 입력값 오른쪽 정렬 */
+	}
+	.input-field_sub:focus {
+	    border-color: #ccc;
+	    outline: none;
+  		border-bottom: spx solid #ccc;
+	}
+   	#day-select,
+   	#day-select2 {
+   		width: 15%; /* 입력창 너비 조정 */
+	    padding: 7px;
+	    font-size: 13px;
+	    border: none;
+    	text-align: center; 
+	    background: transparent;
+  		border-bottom: 2px solid #ccc;
+   	}
+   	.check_img, .delete_img {
+		width:25px;
+	 	height:25px;
+   	}
+   	.check_button {
+   		background:url(resources/image/check.png); 
+		width:25px;
+	 	height:25px;
+	 	border:none;
+		vertical-align:middle;
+		cursor:pointer;
+	    background-repeat: no-repeat;
+		background-position:0px 0px;
+		background-size: 100% 100%;
+   	}
+   	.delete_button {
+   		background:url(resources/image/delete.png); 
+		width:25px;
+	 	height:25px;
+	 	border:none;
+		vertical-align:middle;
+		cursor:pointer;
+	    background-repeat: no-repeat;
+		background-position:0px 0px;
+		background-size: 100% 100%;
+   	}
+   	.input_div {
+   		margin-bottom:7px;
+   	}
+   	.select_div {
+   		width : 100%;
+   		margin-left:50px;
+   		margin-top : 7px;
+   	}
 	
 	/*화면크기가 1000px보다 클 때 */
    @media screen and (min-width:1000px){
@@ -196,6 +381,12 @@
          text-align:left;
          position:relative;
       } 
+      
+      #schedule_table,
+      #diary_table{
+      	margin-top : 30px;
+		padding-left : 20px;	
+      }
    }
 </style>
 
@@ -402,22 +593,77 @@
 			<p class="oswald-title">
 	            TO-DO !
 	         </p>
-	         
+	     </div>
+         <div class = "to-do_table_div ">
 	         <table id = "to-do_table">
 	         		<tr>	
 	         			<td>
-	         				<input type = "radio" id = "to-do_radio"/>
-	         				<span class="kor_font"> 우형예슬예서희원 모임 정산하기!(3,9000원)</span>
+	         				<input type = "checkbox" class = "to-do_checkbox" id = "to-do1"/>
+	         			</td>
+	         			<td>
+	         				<label for = "to-do1" class="kor_font"> 우형예슬예서희원 모임 정산하기!(3,9000원)</label>
 	         			</td>
 	         		</tr>
 	         		<tr>	
 	         			<td>
-	         				<input type = "radio" id = "to-do_radio"/>
-	         				<span class="kor_font"> 간식구매하기</span>
+	         				<input type = "checkbox" class = "to-do_checkbox"  id = "to-do2"/>
+	         			</td>
+	         			<td>
+	         				<label  id = "to-do2" class="kor_font"> 간식구매하기</label>	
 	         			</td>
 	         		</tr>
 	         </table>
-		</div>
+         </div>
+         
+          <!-- 입력창 추가 -->
+         <div class = "input-container">
+         	<form>
+         		<div class = "input_div">
+         			<table id = "to-do_table_input">
+	         			<tr>
+	         				<td>
+         						<input type = "checkbox" class = "to-do_checkbox"/>
+	         				</td>
+	         				<td>
+			         			<input type = "text" id = "to-do_input" class = "input-field kor_font" placeholder = "ToDo 입력..">
+			         			<input class="check_button" type="submit" value="">
+						        <input class="delete_button" type="submit" value="">
+	         				</td>
+	         			</tr>
+			        </table>
+         		</div>
+         		
+         		<div class = "select_div kor_font">
+         			 <label for="to-do_input" class="kor_font">Day |  </label>
+         			<input type = "checkbox" class = "select_checkbox"  name = "일" value = "일"/> 일
+         			<input type = "checkbox" class = "select_checkbox"  name = "월" value = "월"/> 월
+         			<input type = "checkbox" class = "select_checkbox"  name = "화" value = "화"/> 화 
+         			<input type = "checkbox" class = "select_checkbox"  name = "수" value = "수"/> 수
+         			<input type = "checkbox" class = "select_checkbox"  name = "목" value = "목"/> 목
+         			<input type = "checkbox" class = "select_checkbox"  name = "금" value = "금"/> 금
+         			<input type = "checkbox" class = "select_checkbox"  name = "토" value = "토"/> 토
+         		</div>
+         		
+         		<div class = "select_div kor_font">
+			        <label for="day-select" class="kor_font">Date |  </label>
+			        <select id="day-select" name="repeat_date">
+					    <option value="">날짜 선택</option>
+					</select>
+					
+					<script>
+					    const select = document.getElementById("day-select");
+					    
+					    for (let i = 1; i <= 31; i++) {
+					        let option = document.createElement("option");
+					        option.value = i;
+					        option.textContent = i;
+					        select.appendChild(option);
+					    }
+					</script>
+			        <label for="day-select" class="kor_font"> 일 </label>
+         		</div>
+         	</form>
+         </div>
 	</div>
 	
 	<div id = "right-column">
@@ -426,7 +672,75 @@
 				<p class="oswald-title">
 		            SCHEDULE !
 		         </p>
-		        </div>
+		    </div>
+		    
+	         <div class = "schedule_table_div">
+		         <table id = "schedule_table">
+		         		<tr>	
+		         			<td  class="td_left" width="25%">
+		         				<p class="kor_font"> ■ </p>
+		         			</td>
+		         			<td>
+		         				<p class="kor_font"> 우형예슬예서희원 | 과메기 파티</p>
+		         			</td>
+		         		</tr>
+		         </table>
+	         </div>
+         
+          <!-- 입력창 추가 -->
+         <div class = "input-container">
+         	<form>
+         		<div class = "input_div">
+         			<table id = "schedule_table_input">
+	         			<tr>
+	         				<td>
+		         				<p class="kor_font"> ■ </p>
+		         			</td>
+	         				<td>
+			         			<input type = "text" id = "schedule_input" class = "input-field kor_font" placeholder = "일정 등록..">
+			         			<input class="check_button" type="submit" value="">
+						        <input class="delete_button" type="submit" value="">
+	         				</td>
+	         			</tr>
+			        </table>
+         		</div>
+         		
+         		<div class = "select_div kor_font">
+         			 <label for="to-do_input" class="kor_font">Memo |  </label>
+			        <input type="text" id="account_budget" class="input-field_sub kor_font" placeholder="메모 입력.."/>
+         		</div>
+         		
+         		<div class = "select_div kor_font">
+         			 <label for="to-do_input" class="kor_font">Day |  </label>
+         			<input type = "checkbox" class = "select_checkbox"  name = "일" value = "일"/> 일
+         			<input type = "checkbox" class = "select_checkbox"  name = "월" value = "월"/> 월
+         			<input type = "checkbox" class = "select_checkbox"  name = "화" value = "화"/> 화 
+         			<input type = "checkbox" class = "select_checkbox"  name = "수" value = "수"/> 수
+         			<input type = "checkbox" class = "select_checkbox"  name = "목" value = "목"/> 목
+         			<input type = "checkbox" class = "select_checkbox"  name = "금" value = "금"/> 금
+         			<input type = "checkbox" class = "select_checkbox"  name = "토" value = "토"/> 토
+         		</div>
+         		
+         		<div class = "select_div kor_font">
+			        <label for="day-select2" class="kor_font">Date |  </label>
+			        <select id="day-select2" name="repeat_date">
+					    <option value="">날짜 선택</option>
+					</select>
+					
+					<script>
+					    const select2 = document.getElementById("day-select2");
+					    
+					    for (let i = 1; i <= 31; i++) {
+					        let option = document.createElement("option");
+					        option.value = i;
+					        option.textContent = i;
+					        select2.appendChild(option);
+					    }
+					</script>
+			        <label for="day-select2" class="kor_font"> 일 </label>
+         		</div>
+         	</form>
+         </div>
 		</div>
 		
 		<div id = "diary">
@@ -434,6 +748,34 @@
 				<p class="oswald-title">
 		            DIARY !
 		         </p>
+			</div>
+			
+			<div class = "diary_table_div">
+				<table id = "diary_table">
+					<tr>
+						<td id = "diary_title" class = "kor_font">
+							사랑니 뽑은 날
+							<hr id = "diary_underline">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p  id = "diary_contents"  class = "kor_font">
+								오늘은 사랑니를 뽑으러 다녀왔다..<br>
+								잎사귀 치과라고 신촌에 어마무시한 사랑니 공장이라고 하길래 다녀왔다..<br><br>
+								진짜진짜 공장이고 아팠다 너무너무 눈물이나고 볼이 부은건지 살찐건지 모르겠다<br>
+								그리고 놀랍게도 난 의사선생님 얼굴과 목소리를 모른다 그냥 누워잇으면
+								마취해주고 누워있으면 뽑아준다<br><br>
+								그리고 오늘은 과메기 먹을 것 이다..!
+							</p>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<div class = "diary_btn_div">
+				<input type = "button" value = "MODIFY" class = "oswald-menu btn"/>
+				<input type = "button" value = "DELETE"  class = "oswald-menu btn"/>
 			</div>
 		</div>
 	</div>
