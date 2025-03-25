@@ -5,4 +5,23 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
   <mapper namespace = "calendar.model.Calendar">
+  	<select id = "getThisMonthCalendar" resultType = "calendar.model.CalendarBean">
+  		select * 
+  		from calendar
+ 		where to_char(c_ymd, 'yyyy-MM') = #{c_ym} and c_type = 'S' and u_cd = 'U000000001'
+  	</select>
+  	
+  	<select id = "getTodayTodo" resultType = "calendar.model.TodoBean">
+  		select * 
+  		from todo, calendar 
+ 		where calendar.c_type = 'T' and calendar.type_cd = todo.t_cd and  to_char(calendar.c_ymd, 'yyyy-MM-dd') = #{c_ymd} and todo.u_cd = 'U000000001'
+  	</select>
+  	
+  	<select id = "getTodaySchedule" resultType = "calendar.model.ScheduleBean">
+  		select schedule.s_cd, schedule.u_cd, schedule.g_cd, schedule.s_name, schedule.s_memo, groups.g_name
+  		from schedule, calendar, groups
+ 		where calendar.c_type = 'S' and calendar.type_cd = schedule.s_cd and  to_char(calendar.c_ymd, 'yyyy-MM-dd') = #{c_ymd} and schedule.u_cd = 'U000000001' and schedule.g_cd = groups.g_cd
+  	</select>
+  
+  
   </mapper>

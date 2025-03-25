@@ -8,17 +8,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CalendarDao {
+public class ScheduleDao {
 	@Autowired
 	  SqlSessionTemplate sqlSessionTemplate;
 	
 	 private String namespace = "calendar.model.Calendar";
-	 
-	 // select 
-	 public List<CalendarBean> getThisMonthCalendar(String c_ym){
-		 
-		 List<CalendarBean> calendarThisMonthList = sqlSessionTemplate.selectList(namespace + ".getThisMonthCalendar", c_ym);
-		 
-		 return calendarThisMonthList;
-	 }
+
+	public List<ScheduleBean> getTodaySchedule(String c_ymd) {
+		List<ScheduleBean> scheduleList = sqlSessionTemplate.selectList(namespace + ".getTodaySchedule", c_ymd);
+
+		return scheduleList;
+	}
 }

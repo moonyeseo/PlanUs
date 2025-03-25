@@ -14,5 +14,9 @@
 	</bean>
 	
 	<context:component-scan base-package="calendar" />
+	<context:component-scan base-package="todo" />
+	<context:component-scan base-package="schedule" />
+	<context:component-scan base-package="diary" />
+	<context:component-scan base-package="repeat" />
 
 </beans>

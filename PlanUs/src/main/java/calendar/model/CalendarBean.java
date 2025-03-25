@@ -4,9 +4,9 @@ public class CalendarBean {
 	private String c_cd; // PK
 	private String u_cd; // user FK
 	private String r_cd; // repeat FK
-	private String type_cd; // 종류(일기, todo, 일정) PK
-	private String c_type; // 종류(일기, todo, 일정)
-	private String c_ymd; // 날짜
+	private String type_cd; // T/ S/ D PK
+	private String c_type; // T/ S/ D
+	private String c_ymd; // date
 	
 	public String getC_cd() {
 		return c_cd;

@@ -118,6 +118,9 @@
 	    border: 3px solid  #FF3B7C; 
 	    box-sizing: border-box; 
 	}
+	.current{
+    	cursor: pointer;
+	}
 	
 	/************* TO-DO, SCHEDULE ***************/
 	/* table */
@@ -400,9 +403,9 @@
 		today = new Date(utc + kstGap); // 한국 시간으로 date 객체 만들기(오늘)
 		todayDate = today.getDate();
 		
-		var year = <%=request.getParameter("year")%>
-		var month = <%=request.getParameter("month")%>
-		var day = <%=request.getParameter("day")%>
+		var year = <%=request.getParameter("year")%>;
+		var month = <%=request.getParameter("month")%>;
+		var day = <%=request.getParameter("day")%>;
 		
 		var selectDate = new Date(year, month-1, day);
 		
@@ -435,27 +438,25 @@
 		var currentMonth = thisMonth.getMonth(); // 달력에서 표기하는 월
 		var currentDate = thisMonth.getDate(); // 달력에서 표기하는 일
 
-		// 캘린더 렌더링
 		renderCalender(thisMonth);
 
 		function renderCalender(thisMonth) {
 
-			// 렌더링을 위한 데이터 정리
 			currentYear = thisMonth.getFullYear();
 			currentMonth = thisMonth.getMonth();
 			currentDate = thisMonth.getDate();
 
-			// 이전 달의 마지막 날 날짜와 요일 구하기
+			// last Month's last day and last date (이전 달의 마지막 날 날짜와 요일 구하기)
 			var startDay = new Date(currentYear, currentMonth, 0);
 			var prevDate = startDay.getDate();
 			var prevDay = startDay.getDay();
 
-			// 이번 달의 마지막날 날짜와 요일 구하기
+			// this Month's last day and last date(이번 달의 마지막날 날짜와 요일 구하기)
 			var endDay = new Date(currentYear, currentMonth + 1, 0);
 			var nextDate = endDay.getDate();
 			var nextDay = endDay.getDay();
 			
-			// 현재 월 표기
+			// current Month
 			$('#month_number').text( (currentMonth + 1));
 			
 			switch(currentMonth){
@@ -503,24 +504,24 @@
 			calendar = document.querySelector('.dates')
 			calendar.innerHTML = '';
 			
-			// 지난달
+			// last Month
 			for (var i = prevDate - prevDay; i <= prevDate; i++) {
 				calendar.innerHTML = calendar.innerHTML
 						+ '<div class="kor_font day prev disable">' + i + '</div>'
 			}
-			// 이번달
+			// this Month
 			for (var i = 1; i <= nextDate; i++) {
 				calendar.innerHTML = calendar.innerHTML
-						+ '<div class="kor_font day current" onclick = "getDate(this)"><a href="javascript:void(0);" onClick = "getDate(this)">'
+						+ '<div id = "' + i + '" class="kor_font day current" onclick = "getDate(this)"><a href="javascript:void(0);" onClick = "getDate(this)">'
 						+ i + '</a></div>'
 			}
-			// 다음달
+			// next Month
 			for (var i = 1; i < (7 - nextDay == 7 ? 0 : 7 - nextDay); i++) {
 				calendar.innerHTML = calendar.innerHTML
 						+ '<div class="kor_font day next disable">' + i + '</div>'
 			}
-
-			// 오늘 날짜 표기
+			
+			// today
 			var currentMonthDate = document
 						.querySelectorAll('.dates .current');
 			
@@ -596,22 +597,38 @@
 	     </div>
          <div class = "to-do_table_div ">
 	         <table id = "to-do_table">
-	         		<tr>	
-	         			<td>
-	         				<input type = "checkbox" class = "to-do_checkbox" id = "to-do1"/>
-	         			</td>
-	         			<td>
-	         				<label for = "to-do1" class="kor_font"> 우형예슬예서희원 모임 정산하기!(3,9000원)</label>
-	         			</td>
-	         		</tr>
-	         		<tr>	
-	         			<td>
-	         				<input type = "checkbox" class = "to-do_checkbox"  id = "to-do2"/>
-	         			</td>
-	         			<td>
-	         				<label  id = "to-do2" class="kor_font"> 간식구매하기</label>	
-	         			</td>
-	         		</tr>
+	         		<c:if test="${fn:length(todoList) eq 0}">
+	         			<tr>
+	         				<td></td>
+	         				<td><label class="kor_font" style = "color : gray"> 오늘의 할 일을 등록해주세요 :)</label>	</td>
+	         			</tr>
+	         		</c:if>
+	         		<c:if test="${fn:length(todoList) > 0}">
+	         				<c:forEach var = "todo" items = "${todoList}" varStatus = "status">
+	         					<tr>
+			         			<td>
+			         				<c:choose>
+			         					<c:when test = "${todo.t_ok_yn eq 'Y' }">
+			         						<input type = "checkbox" class = "to-do_checkbox" checked/> 
+			         					</c:when>
+			         					<c:otherwise>
+			         						<input type = "checkbox" class = "to-do_checkbox"/> 
+			         					</c:otherwise>
+			         				</c:choose>
+			         			</td>
+			         			<td>
+			         				<c:choose>
+			         					<c:when test = "${todo.t_ok_yn eq 'Y' }">
+			         						<label class="kor_font" style = "color : gray; text-decoration : line-through;"> ${todo.t_name }</label>	
+			         					</c:when>
+			         					<c:otherwise>
+			         						<label class="kor_font"> ${todo.t_name }</label>	
+			         					</c:otherwise>
+			         				</c:choose>
+			         			</td>
+			         			</tr>
+	         			</c:forEach>
+	         		</c:if>
 	         </table>
          </div>
          
@@ -676,14 +693,29 @@
 		    
 	         <div class = "schedule_table_div">
 		         <table id = "schedule_table">
-		         		<tr>	
-		         			<td  class="td_left" width="25%">
-		         				<p class="kor_font"> ■ </p>
-		         			</td>
-		         			<td>
-		         				<p class="kor_font"> 우형예슬예서희원 | 과메기 파티</p>
-		         			</td>
-		         		</tr>
+			         <c:if test="${fn:length(shceduleList) eq 0}">
+		         			<tr>
+		         				<td></td>
+		         				<td><label class="kor_font" style = "color : gray"> 오늘의 일정을 등록해주세요 :)</label>	</td>
+		         			</tr>
+		         		</c:if>
+		         		<c:if test="${fn:length(shceduleList) > 0}">
+		         				<c:forEach var = "schedule" items = "${shceduleList}" varStatus = "status">
+		         					<tr>
+					         			<td  class="td_left" width="25%">
+					         				<p class="kor_font"> ■ </p>
+					         			</td>
+					         			<td>
+					         				<p class="kor_font"> 
+					         					<c:if test = "${not empty schedule.g_cd }">
+					         						${schedule.g_name }&nbsp;|&nbsp; 
+					         					</c:if>
+					         						${schedule.s_name }
+					         				</p>
+					         			</td>
+				         			</tr>
+		         			</c:forEach>
+		         		</c:if>
 		         </table>
 	         </div>
          
