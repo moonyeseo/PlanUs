@@ -102,7 +102,7 @@
 	
 	/*화면크기가 1000px보다 클 때 */
 	@media screen and (min-width:1000px){
-		li{
+		.hamberger-li{
 			display:none;
 		}
 	}
@@ -195,7 +195,7 @@
 		#toggle_list{
 			margin-top:130px;						
 		}
-		li{
+		.hamberger-li{
 			list-style-type:none;
 			margin-top:35px;
 			text-align:left;	
@@ -327,7 +327,7 @@
 					</a>
 				</td>
 				<td>
-					<a class = "menu_list oswald-menu" href = "go.groups">
+					<a id = "menu_club" class = "menu_list oswald-menu" href = "go.groups">
 						CLUB
 					</a>
 				</td>
@@ -352,22 +352,22 @@
 	</div>
 	<div id="toggle_menu">
 		<ul id="toggle_list">
-			<li>
+			<li class="hamberger-li">
 				<a class = "oswald-menu go_calendar"  href = "javascript:void(0);">
 					CALENDAR
 				</a>
 			</li>
-			<li>
+			<li class="hamberger-li">
 				<a class = "oswald-menu" href = "go.accountbook">
 					ACCOUNTBOOK
 				</a>
 			</li>
-			<li>
+			<li class="hamberger-li">
 				<a class = "oswald-menu" href = "go.groups">
 					CLUB
 				</a>
 			</li>
-			<li>
+			<li class="hamberger-li">
 				<a class = "oswald-menu" href = "">
 					NOTICE
 				</a>
