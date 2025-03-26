@@ -32,6 +32,20 @@
 		font-size: 20px;
 		background-color: white;
 	}
+	#month_table{
+		width : 100%;
+		height : 70px;
+		margin : auto;
+		text-align : center;
+		font-size: 20px;
+		table-layout: fixed;
+	}
+	#month_table td:nth-child(1){
+		text-align : right;
+	}
+	#month_table td:nth-child(3){
+		text-align : left;
+	}
 	/* 달 숫자 */
 	#month_number{
 		font-size: 30px;
@@ -137,11 +151,15 @@
 	   margin-top: 10px;
 	}
 	.to-do_table_div,
-	.schedule_table_div,
+	.schedule_table_div{
+		margin-top : 30px;
+		max-height: 500px; /* 원하는 높이로 조절 */
+	    overflow-y: auto; /* 세로 스크롤 추가 */
+	    text-align: left;
+	}
 	.diary_table_div{
 		margin-top : 30px;
-		max-height: 400px; /* 원하는 높이로 조절 */
-	    overflow-y: auto; /* 세로 스크롤 추가 */
+		max-height: 500px; /* 원하는 높이로 조절 */
 	    text-align: left;
 	}
 	#to-do_table td,
@@ -212,10 +230,9 @@
 	}
 	#diary_contents{
 		width : 100%;
-		height : 200px;
+		height : 230px;
 		border : none;
 		background-color : transparent;
-		resize: none;
 	}
 	
 	/*************  수정, 삭제 버튼 ***************/
@@ -572,10 +589,14 @@
 	<table id = "calendar">
 		<tr>
 			<td>
-				<div id = "month" class = "oswald-menu">
-					<a href="javascript:;" class="go-prev arrow_btn">◀</a>&emsp;&emsp;&emsp;
-					<span id = "month_number"></span> <span id = "month_eng"></span>&emsp;&emsp;&emsp;
-					<a href="javascript:;" class="go-next arrow_btn">▶</a>
+				<div id = "month">
+					<table id = "month_table"  class = "oswald-menu">
+						<tr>
+							<td><a href="javascript:;" class="go-prev arrow_btn ">◀</a></td>
+							<td><span id = "month_number"></span> <span id = "month_eng"></span></td>
+							<td><a href="javascript:;" class="go-next arrow_btn">▶</a></td>
+						</tr>
+					</table>
 				</div>
 			</td>
 		</tr>
@@ -819,8 +840,13 @@
 			</div>
 			
 			<div class = "diary_btn_div">
-				<input type = "button" value = "MODIFY" class = "oswald-menu btn"/>
-				<input type = "button" value = "DELETE"  class = "oswald-menu btn"/>
+				<c:if test="${empty diary}">
+	         			<input type = "button" value = "WRITE" class = "oswald-menu btn"/>
+	         	</c:if>
+	         	<c:if test="${not empty diary}">
+	         			<input type = "button" value = "MODIFY" class = "oswald-menu btn"/>
+						<input type = "button" value = "DELETE"  class = "oswald-menu btn"/>
+	         	</c:if>
 			</div>
 		</div>
 	</div>
