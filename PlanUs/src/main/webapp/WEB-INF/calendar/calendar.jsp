@@ -207,6 +207,17 @@
 		border : 0px;
 		border-top : 3px solid #FF3B7C;
 	}
+	#diary_table tr:nth-child(2){
+		height : 230px;
+	}
+	#diary_contents{
+		width : 100%;
+		height : 200px;
+		border : none;
+		background-color : transparent;
+		resize: none;
+	}
+	
 	/*************  수정, 삭제 버튼 ***************/
 	.diary_btn_div{
 	    position: absolute;
@@ -384,7 +395,6 @@
          text-align:left;
          position:relative;
       } 
-      
       #schedule_table,
       #diary_table{
       	margin-top : 30px;
@@ -693,14 +703,14 @@
 		    
 	         <div class = "schedule_table_div">
 		         <table id = "schedule_table">
-			         <c:if test="${fn:length(shceduleList) eq 0}">
+			         <c:if test="${fn:length(scheduleList) eq 0}">
 		         			<tr>
 		         				<td></td>
 		         				<td><label class="kor_font" style = "color : gray"> 오늘의 일정을 등록해주세요 :)</label>	</td>
 		         			</tr>
 		         		</c:if>
-		         		<c:if test="${fn:length(shceduleList) > 0}">
-		         				<c:forEach var = "schedule" items = "${shceduleList}" varStatus = "status">
+		         		<c:if test="${fn:length(scheduleList) > 0}">
+		         				<c:forEach var = "schedule" items = "${scheduleList}" varStatus = "status">
 		         					<tr>
 					         			<td  class="td_left" width="25%">
 					         				<p class="kor_font"> ■ </p>
@@ -708,7 +718,7 @@
 					         			<td>
 					         				<p class="kor_font"> 
 					         					<c:if test = "${not empty schedule.g_cd }">
-					         						${schedule.g_name }&nbsp;|&nbsp; 
+					         						${schedule.g_name }&nbsp;|
 					         					</c:if>
 					         						${schedule.s_name }
 					         				</p>
@@ -784,24 +794,27 @@
 			
 			<div class = "diary_table_div">
 				<table id = "diary_table">
-					<tr>
-						<td id = "diary_title" class = "kor_font">
-							사랑니 뽑은 날
-							<hr id = "diary_underline">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<p  id = "diary_contents"  class = "kor_font">
-								오늘은 사랑니를 뽑으러 다녀왔다..<br>
-								잎사귀 치과라고 신촌에 어마무시한 사랑니 공장이라고 하길래 다녀왔다..<br><br>
-								진짜진짜 공장이고 아팠다 너무너무 눈물이나고 볼이 부은건지 살찐건지 모르겠다<br>
-								그리고 놀랍게도 난 의사선생님 얼굴과 목소리를 모른다 그냥 누워잇으면
-								마취해주고 누워있으면 뽑아준다<br><br>
-								그리고 오늘은 과메기 먹을 것 이다..!
-							</p>
-						</td>
-					</tr>
+			         <c:if test="${empty diary}">
+	         			<tr>
+	         				<td><label class="kor_font" style = "color : gray; padding-left : 30px"> 오늘의 일기를 등록해주세요 :)</label>	</td>
+	         			</tr>
+	         		</c:if>
+	         		
+			        <c:if test="${not empty diary}">
+						<tr>
+							<td id = "diary_title" class = "kor_font">
+								${diary.d_title }
+								<hr id = "diary_underline">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<textarea readonly id = "diary_contents"  class = "kor_font">
+									${diary.d_detail}
+								</textarea>
+							</td>
+						</tr>
+					</c:if>
 				</table>
 			</div>
 			

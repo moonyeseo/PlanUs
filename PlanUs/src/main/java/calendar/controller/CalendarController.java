@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import calendar.model.CalendarBean;
 import calendar.model.CalendarDao;
+import calendar.model.DiaryBean;
 import calendar.model.DiaryDao;
 import calendar.model.ScheduleBean;
 import calendar.model.ScheduleDao;
@@ -80,7 +81,10 @@ public class CalendarController {
 		List<ScheduleBean> scheduleList = scheduleDao.getTodaySchedule(c_ymd);
 		model.addAttribute("scheduleList", scheduleList);
 		
-		System.out.println(scheduleList.size());
+		// diary
+		DiaryBean diary = null;
+		diary = diaryDao.getTodaDiary(c_ymd);
+		model.addAttribute("diary", diary);
 		
 		return "calendar";
 	}

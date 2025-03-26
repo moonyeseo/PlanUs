@@ -6,22 +6,41 @@
   
   <mapper namespace = "calendar.model.Calendar">
   	<select id = "getThisMonthCalendar" resultType = "calendar.model.CalendarBean">
-  		select * 
-  		from calendar
- 		where to_char(c_ymd, 'yyyy-MM') = #{c_ym} and c_type = 'S' and u_cd = 'U000000001'
+  		SELECT * 
+  		FROM calendar
+ 		WHERE TO_CHAR(c_ymd, 'yyyy-MM') = #{c_ym} 
+ 					 AND c_type = 'S' 
+ 					 AND u_cd = 'U000000001'
   	</select>
   	
   	<select id = "getTodayTodo" resultType = "calendar.model.TodoBean">
-  		select * 
-  		from todo, calendar 
- 		where calendar.c_type = 'T' and calendar.type_cd = todo.t_cd and  to_char(calendar.c_ymd, 'yyyy-MM-dd') = #{c_ymd} and todo.u_cd = 'U000000001'
+  		SELECT * 
+  		FROM todo, calendar 
+ 		WHERE calendar.c_type = 'T' 
+ 					 AND calendar.type_cd = todo.t_cd 
+ 					 AND  TO_CHAR(calendar.c_ymd, 'yyyy-MM-dd') = #{c_ymd} 
+ 					 AND todo.u_cd = 'U000000001'
   	</select>
   	
   	<select id = "getTodaySchedule" resultType = "calendar.model.ScheduleBean">
-  		select schedule.s_cd, schedule.u_cd, schedule.g_cd, schedule.s_name, schedule.s_memo, groups.g_name
-  		from schedule, calendar, groups
- 		where calendar.c_type = 'S' and calendar.type_cd = schedule.s_cd and  to_char(calendar.c_ymd, 'yyyy-MM-dd') = #{c_ymd} and schedule.u_cd = 'U000000001' and schedule.g_cd = groups.g_cd
+  		SELECT schedule.s_cd, schedule.u_cd, schedule.g_cd, schedule.s_name, schedule.s_memo, groups.g_name
+  		FROM schedule
+ 		JOIN calendar
+ 				ON calendar.c_type = 'S' 
+ 				AND calendar.type_cd = schedule.s_cd 
+ 				AND  TO_CHAR(calendar.c_ymd, 'yyyy-MM-dd') = #{c_ymd} 
+ 		LEFT JOIN groups
+ 						ON <!-- schedule.g_cd IS NULL
+ 					  	OR --> schedule.g_cd = groups.g_cd
+ 		WHERE schedule.u_cd = 'U000000001'
   	</select>
   
-  
+  	<select id = "getTodaDiary" resultType = "calendar.model.DiaryBean">
+  		SELECT * 
+  		FROM diary, calendar
+  		WHERE calendar.c_type = 'D'
+ 					 AND calendar.type_cd = diary.d_cd 
+ 					 AND  TO_CHAR(calendar.c_ymd, 'yyyy-MM-dd') = #{c_ymd} 
+ 					 AND diary.u_cd = 'U000000001'
+  	</select>
   </mapper>
