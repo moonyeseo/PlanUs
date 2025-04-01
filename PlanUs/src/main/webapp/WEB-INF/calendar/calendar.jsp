@@ -228,19 +228,25 @@
 	#diary_table tr:nth-child(2){
 		height : 230px;
 	}
+	#diary_table tr:nth-child(3){
+		padding-top : 20px;
+		float : right;
+		padding-right : 10px;
+	}
 	#diary_contents{
 		width : 100%;
 		height : 230px;
 		border : none;
 		background-color : transparent;
+		resize : none;
 	}
 	
 	/*************  수정, 삭제 버튼 ***************/
-	.diary_btn_div{
+ 	.diary_btn_div{
 	    position: absolute;
 	    bottom: 20; /* 부모 요소의 가장 아래쪽에 위치 */
 	    right: 20;
-	}
+	} 
 	.btn{
 		border : none;
 		background-color : #FF3B7C;
@@ -384,6 +390,10 @@
          text-align:left;
          position:relative;
       }
+      #diary_table{;
+         width : 40vw;
+         aspect-ratio:1.6/1;
+      }
    }
 
    /*화면크기가 1000px보다 작을 때 */
@@ -412,10 +422,20 @@
          text-align:left;
          position:relative;
       } 
-      #schedule_table,
-      #diary_table{
+      #schedule_table{
       	margin-top : 30px;
 		padding-left : 20px;	
+      }
+      .diary_table_div{
+         width : 90vw;
+         aspect-ratio:1.0/1;
+      }
+      #diary_table{
+         width : 90vw;
+         aspect-ratio:1.2/1;
+      } 
+      #diary_table tr:nth-child(2){
+      	height: 60%;
       }
    }
 </style>
@@ -816,9 +836,10 @@
 			<div class = "diary_table_div">
 				<table id = "diary_table">
 			         <c:if test="${empty diary}">
-	         			<tr>
-	         				<td><label class="kor_font" style = "color : gray; padding-left : 30px"> 오늘의 일기를 등록해주세요 :)</label>	</td>
+	         			<tr style = "padding-top : 0px">
+	         				<td><label class="kor_font" style = "color : gray; padding-left : 30px;"> 오늘의 일기를 등록해주세요 :)</label>	</td>
 	         			</tr>
+	         			<tr><td></td></tr>
 	         		</c:if>
 	         		
 			        <c:if test="${not empty diary}">
@@ -836,17 +857,19 @@
 							</td>
 						</tr>
 					</c:if>
+					
+					<tr>
+						<td>
+							<c:if test="${empty diary}">
+				         			<input type = "button" value = "WRITE" class = "oswald-menu btn"/>
+				         	</c:if>
+				         	<c:if test="${not empty diary}">
+				         			<input type = "button" value = "MODIFY" class = "oswald-menu btn"/>
+									<input type = "button" value = "DELETE"  class = "oswald-menu btn"/>
+				         	</c:if>
+						</td>
+					</tr>
 				</table>
-			</div>
-			
-			<div class = "diary_btn_div">
-				<c:if test="${empty diary}">
-	         			<input type = "button" value = "WRITE" class = "oswald-menu btn"/>
-	         	</c:if>
-	         	<c:if test="${not empty diary}">
-	         			<input type = "button" value = "MODIFY" class = "oswald-menu btn"/>
-						<input type = "button" value = "DELETE"  class = "oswald-menu btn"/>
-	         	</c:if>
 			</div>
 		</div>
 	</div>
