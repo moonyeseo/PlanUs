@@ -33,6 +33,16 @@ public class usersController {
         model.addAttribute("data","회원 가입하시오");
         return "login";
     }
+	@RequestMapping("join.users")
+    public String join(Model model){
+        model.addAttribute("data","회원 가입하시오");
+        return "join";
+    }
+	@RequestMapping("joinDetail.users")
+    public String joinDetail(Model model){
+        model.addAttribute("data","회원 가입하시오");
+        return "joinDetail";
+    }
 	
 	@RequestMapping(value = Command, method = RequestMethod.POST)
 	public ModelAndView start(
