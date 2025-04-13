@@ -14,16 +14,20 @@
   	</select>
   	
   	<select id = "getTodayTodo" resultType = "calendar.model.TodoBean">
-  		SELECT * 
-  		FROM todo, calendar 
- 		WHERE calendar.c_type = 'T' 
- 					 AND calendar.type_cd = todo.t_cd 
- 					 AND  TO_CHAR(calendar.c_ymd, 'yyyy-MM-dd') = #{c_ymd} 
- 					 AND todo.u_cd = 'U000000001'
+  		SELECT todo.t_cd, todo.u_cd, todo.t_name, todo.t_ok_yn, repeat.r_type, repeat.r_detail
+  		FROM todo
+  		JOIN calendar
+  				ON calendar.c_type = 'T' 
+ 				AND calendar.type_cd = todo.t_cd 
+ 				AND  TO_CHAR(calendar.c_ymd, 'yyyy-MM-dd') = #{c_ymd} 
+  		LEFT JOIN repeat
+  					ON repeat.c_type = 'T'
+ 					AND repeat.type_cd = todo.t_cd
+ 		WHERE  todo.u_cd = 'U000000001'
   	</select>
   	
   	<select id = "getTodaySchedule" resultType = "calendar.model.ScheduleBean">
-  		SELECT schedule.s_cd, schedule.u_cd, schedule.g_cd, schedule.s_name, schedule.s_memo, groups.g_name
+  		SELECT schedule.s_cd, schedule.u_cd, schedule.g_cd, schedule.s_name, schedule.s_memo, groups.g_name, repeat.r_type, repeat.r_detail
   		FROM schedule
  		JOIN calendar
  				ON calendar.c_type = 'S' 
@@ -32,6 +36,9 @@
  		LEFT JOIN groups
  						ON <!-- schedule.g_cd IS NULL
  					  	OR --> schedule.g_cd = groups.g_cd
+  		LEFT JOIN repeat
+  					ON repeat.c_type = 'S'
+ 					AND repeat.type_cd = schedule.s_cd
  		WHERE schedule.u_cd = 'U000000001'
   	</select>
   

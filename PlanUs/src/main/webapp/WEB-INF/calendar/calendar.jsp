@@ -107,6 +107,7 @@
 	/* 날짜에 마우스 올리면 핑크색 */
 	a:hover{
 		color : #FF3B7C;
+    	cursor: pointer;
 	}
 	.day:nth-child(7n+1) a:hover {
 		color: #FF3B7C !important;
@@ -193,6 +194,10 @@
 	.to-do_checkbox:checked{
 	    border-color: #FF3B7C;
 	    background-color: #FF3B7C;
+	}
+	.checkbox_yes{
+		color : gray; 
+		text-decoration : line-through;
 	}
 	
 	/*요일 반복 checkbox*/
@@ -303,8 +308,9 @@
 	    outline: none;
   		border-bottom: spx solid #ccc;
 	}
-   	#day-select,
-   	#day-select2 {
+   	#todo_date-select,
+   	#schedule_date-select,
+   	#schedule_group-select{
    		width: 15%; /* 입력창 너비 조정 */
 	    padding: 7px;
 	    font-size: 13px;
@@ -312,6 +318,7 @@
     	text-align: center; 
 	    background: transparent;
   		border-bottom: 2px solid #ccc;
+  		cursor : pointer;
    	}
    	.check_img, .delete_img {
 		width:25px;
@@ -346,6 +353,14 @@
    		width : 100%;
    		margin-left:50px;
    		margin-top : 7px;
+   	}
+   	#todo_date_selected,
+   	#schedule_date_selected{
+   		font-size : 12px;
+   		color : gray;
+		font-family: "Gowun Dodum", sans-serif;
+		font-weight: 400;
+		font-style: normal;
    	}
 	
 	/*화면크기가 1000px보다 클 때 */
@@ -442,6 +457,7 @@
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
+/****************** CALENDAR ******************/
 	$(document).ready(function(){
 		// 날짜 정보 가져오기
 		date = new Date(); // 현재 날짜(로컬 기준) 가져오기
@@ -603,6 +619,109 @@
  			location.href = "go.calendar?year="  + currentYear + "&month=" + (currentMonth+2) + "&day=" + 1;
 		});
 	}
+	
+
+/****************** TODO ******************/
+	function todo_Click(todo){
+ 		var t_cd = todo.getAttribute("id");
+		var t_name = todo.text;
+		var t_ok_yn = $("#" + t_cd + "_t_ok_yn").val();
+		var r_type = $("#" + t_cd + "_r_type").val();
+		var r_detail = $("#" + t_cd + "_r_detail").val();
+		var r_detail_split = r_detail.split(",");
+		
+		$("#todo_date_selected").html("");
+		$("input[name=todo_day]").prop("checked", false);
+		
+		$("#to-do_input").val(t_name);
+		$("#to-do_input").focus();
+		
+		if(t_ok_yn == "Y"){
+			$("#to-do_checkbox_input").prop("checked", true);
+		}
+		else{
+			$("#to-do_checkbox_input").prop("checked", false);
+		}
+		
+		if(r_type == "1"){
+			for(var i  = 0; i < r_detail_split.length; i++){
+				if($("#todo_date_selected").text().indexOf("일") == -1){
+					$("#todo_date_selected").html(" <a href = 'javascript:void(0);' onClick = 'deleteTodoDate(this)' class = 'delete_date' >" + r_detail_split[i] + "일</a>");
+				}
+				else{
+					$("#todo_date_selected").html($("#todo_date_selected").html() + "<a href =  'javascript:void(0);' onClick = 'deleteTodoDate(this)' class = 'delete_date'> , " + r_detail_split[i] + "일</a>");
+				}
+			}
+		}
+		else if(r_type == "0"){
+			for(var i  = 0; i < r_detail_split.length; i++){
+				$("input[name=todo_day][value=" + r_detail_split[i] +"]").prop("checked", true);
+			}
+		}
+		
+	}
+	
+	function selectTodoDate(todo_date){
+		if($("#todo_date_selected").text().indexOf("일") == -1){
+			$("#todo_date_selected").html(" <a href = 'javascript:void(0);' onClick = 'deleteTodoDate(this)' class = 'delete_date'>" + todo_date.value + "일</a>");
+		}
+		else{
+			$("#todo_date_selected").html($("#todo_date_selected").html() + "<a href =  'javascript:void(0);' onClick = 'deleteTodoDate(this)' class = 'delete_date'> , " + todo_date.value + "일</a>");
+		}
+	}
+	
+	function deleteTodoDate(todo_date){
+		$(todo_date).remove();
+	}
+	
+
+	/****************** SCHEDULE ******************/
+		function schedule_Click(schedule){
+	 		var s_cd = schedule.getAttribute("id");
+	 		var g_name = $("#" + s_cd + "_g_name").text();
+			var s_name = $("#" + s_cd + "_s_name").text();
+			var s_memo = $("#" + s_cd + "_s_memo").val();
+			var r_type = $("#" + s_cd + "_r_type").val();
+			var r_detail = $("#" + s_cd + "_r_detail").val();
+			var r_detail_split = r_detail.split(",");
+			
+			$("#schedule_date_selected").html("");
+			$("input[name=schedule_day]").prop("checked", false);
+			
+			$("#schedule_input").val(s_name);
+			$("#schedule_input").focus();
+			
+			$("#schedule_memo_input").val(s_memo);
+			
+			if(r_type == "1"){
+				for(var i  = 0; i < r_detail_split.length; i++){
+					if($("#schedule_date_selected").text().indexOf("일") == -1){
+						$("#schedule_date_selected").html(" <a href = 'javascript:void(0);' onClick = 'deleteScheduleDate(this)' class = 'delete_date' >" + r_detail_split[i] + "일</a>");
+					}
+					else{
+						$("#schedule_date_selected").html($("#schedule_date_selected").html() + "<a href =  'javascript:void(0);' onClick = 'deleteScheduleDate(this)' class = 'delete_date'> , " + r_detail_split[i] + "일</a>");
+					}
+				}
+			}
+			else if(r_type == "0"){
+				for(var i  = 0; i < r_detail_split.length; i++){
+					$("input[name=schedule_day][value=" + r_detail_split[i] +"]").prop("checked", true);
+				}
+			}
+		}
+		
+		function selectScheduleDate(schedule_date){
+			if($("#schedule_date_selected").text().indexOf("일") == -1){
+				$("#schedule_date_selected").html(" <a href = 'javascript:void(0);' onClick = 'deleteScheduleDate(this)' class = 'delete_date'>" + schedule_date.value + "일</a>");
+			}
+			else{
+				$("#schedule_date_selected").html($("#schedule_date_selected").html() + "<a href =  'javascript:void(0);' onClick = 'deleteScheduleDate(this)' class = 'delete_date'> , " + schedule_date.value + "일</a>");
+			}
+		}
+		
+		function deleteScheduleDate(schedule_date){
+			$(schedule_date).remove();
+		}
 </script>
 
 <div id = "calendar_main">
@@ -670,12 +789,16 @@
 			         			<td>
 			         				<c:choose>
 			         					<c:when test = "${todo.t_ok_yn eq 'Y' }">
-			         						<label class="kor_font" style = "color : gray; text-decoration : line-through;"> ${todo.t_name }</label>	
+			         						<label class="kor_font"  id = "${todo.t_cd }"> <a href = "javascript:void(0);" onClick = "todo_Click(this)" class = "checkbox_yes" id = "${todo.t_cd }">${todo.t_name }</a></label>
 			         					</c:when>
 			         					<c:otherwise>
-			         						<label class="kor_font"> ${todo.t_name }</label>	
+			         						<label class="kor_font"  id = "${todo.t_cd }"> <a href = "javascript:void(0);" onClick = "todo_Click(this)"  id = "${todo.t_cd }">${todo.t_name }</a></label>	
 			         					</c:otherwise>
 			         				</c:choose>
+			         				
+			         				<input type = "hidden" id = "${todo.t_cd }_t_ok_yn" value = "${todo.t_ok_yn }">
+			         				<input type = "hidden" id = "${todo.t_cd }_r_type" value = "${todo.r_type }">
+			         				<input type = "hidden" id = "${todo.t_cd }_r_detail" value = "${todo.r_detail }">
 			         			</td>
 			         			</tr>
 	         			</c:forEach>
@@ -690,12 +813,12 @@
          			<table id = "to-do_table_input">
 	         			<tr>
 	         				<td>
-         						<input type = "checkbox" class = "to-do_checkbox"/>
+         						<input type = "checkbox" class = "to-do_checkbox" id = "to-do_checkbox_input"/>
 	         				</td>
 	         				<td>
 			         			<input type = "text" id = "to-do_input" class = "input-field kor_font" placeholder = "ToDo 입력..">
-			         			<input class="check_button" type="submit" value="">
-						        <input class="delete_button" type="submit" value="">
+			         			<input class="check_button" type="submit" value = "">
+						        <input class="delete_button" type="reset" value = "">
 	         				</td>
 	         			</tr>
 			        </table>
@@ -703,23 +826,23 @@
          		
          		<div class = "select_div kor_font">
          			 <label for="to-do_input" class="kor_font">Day |  </label>
-         			<input type = "checkbox" class = "select_checkbox"  name = "일" value = "일"/> 일
-         			<input type = "checkbox" class = "select_checkbox"  name = "월" value = "월"/> 월
-         			<input type = "checkbox" class = "select_checkbox"  name = "화" value = "화"/> 화 
-         			<input type = "checkbox" class = "select_checkbox"  name = "수" value = "수"/> 수
-         			<input type = "checkbox" class = "select_checkbox"  name = "목" value = "목"/> 목
-         			<input type = "checkbox" class = "select_checkbox"  name = "금" value = "금"/> 금
-         			<input type = "checkbox" class = "select_checkbox"  name = "토" value = "토"/> 토
+         			<input type = "checkbox" class = "select_checkbox"  name = "todo_day" value = "일"/> 일
+         			<input type = "checkbox" class = "select_checkbox"  name = "todo_day" value = "월"/> 월
+         			<input type = "checkbox" class = "select_checkbox"  name = "todo_day" value = "화"/> 화 
+         			<input type = "checkbox" class = "select_checkbox"  name = "todo_day" value = "수"/> 수
+         			<input type = "checkbox" class = "select_checkbox"  name = "todo_day" value = "목"/> 목
+         			<input type = "checkbox" class = "select_checkbox"  name = "todo_day" value = "금"/> 금
+         			<input type = "checkbox" class = "select_checkbox"  name = "todo_day" value = "토"/> 토
          		</div>
          		
          		<div class = "select_div kor_font">
-			        <label for="day-select" class="kor_font">Date |  </label>
-			        <select id="day-select" name="repeat_date">
+			        <label for="todo_date-select" class="kor_font">Date |  </label>
+			        <select id="todo_date-select" name="todo_date-select" onchange = "selectTodoDate(this)">
 					    <option value="">날짜 선택</option>
 					</select>
 					
 					<script>
-					    const select = document.getElementById("day-select");
+					    const select = document.getElementById("todo_date-select");
 					    
 					    for (let i = 1; i <= 31; i++) {
 					        let option = document.createElement("option");
@@ -728,7 +851,9 @@
 					        select.appendChild(option);
 					    }
 					</script>
-			        <label for="day-select" class="kor_font"> 일 </label>
+			        <label for="todo_date-select" class="kor_font"> 일 </label>
+			        
+			        <label id = "todo_date_selected">&nbsp;</label>
          		</div>
          	</form>
          </div>
@@ -758,11 +883,17 @@
 					         			</td>
 					         			<td>
 					         				<p class="kor_font"> 
-					         					<c:if test = "${not empty schedule.g_cd }">
-					         						${schedule.g_name }&nbsp;|
-					         					</c:if>
-					         						${schedule.s_name }
+						         				 <a href = "javascript:void(0);" onClick = "schedule_Click(this)" id = "${schedule.s_cd }">
+						         					<c:if test = "${not empty schedule.g_cd }">
+						         						<span id = "${schedule.s_cd }_g_name">${schedule.g_name }&nbsp;|</span>
+						         					</c:if>
+						         						<span id = "${schedule.s_cd }_s_name">${schedule.s_name }</span>
+					         					</a>
 					         				</p>
+					         				
+					         				<input type = "hidden" id = "${schedule.s_cd }_s_memo" value = "${schedule.s_memo }">
+					         				<input type = "hidden" id = "${schedule.s_cd }_r_type" value = "${schedule.r_type }">
+					         				<input type = "hidden" id = "${schedule.s_cd  }_r_detail" value = "${schedule.r_detail }">
 					         			</td>
 				         			</tr>
 		         			</c:forEach>
@@ -789,29 +920,36 @@
          		</div>
          		
          		<div class = "select_div kor_font">
-         			 <label for="to-do_input" class="kor_font">Memo |  </label>
-			        <input type="text" id="account_budget" class="input-field_sub kor_font" placeholder="메모 입력.."/>
+         			 <label for="schedule_group-select" class="kor_font">Group |  </label>
+         			 	<select id="schedule_group-select" name="schedule_group-select">
+					    <option value="">모임 선택</option>
+					</select>
+         		</div>
+         		
+         		<div class = "select_div kor_font">
+         			 <label for="schedule_input" class="kor_font">Memo |  </label>
+			        <input type="text" id="schedule_memo_input" class="input-field_sub kor_font" placeholder="메모 입력.."/>
          		</div>
          		
          		<div class = "select_div kor_font">
          			 <label for="to-do_input" class="kor_font">Day |  </label>
-         			<input type = "checkbox" class = "select_checkbox"  name = "일" value = "일"/> 일
-         			<input type = "checkbox" class = "select_checkbox"  name = "월" value = "월"/> 월
-         			<input type = "checkbox" class = "select_checkbox"  name = "화" value = "화"/> 화 
-         			<input type = "checkbox" class = "select_checkbox"  name = "수" value = "수"/> 수
-         			<input type = "checkbox" class = "select_checkbox"  name = "목" value = "목"/> 목
-         			<input type = "checkbox" class = "select_checkbox"  name = "금" value = "금"/> 금
-         			<input type = "checkbox" class = "select_checkbox"  name = "토" value = "토"/> 토
+         			<input type = "checkbox" class = "select_checkbox"  name = "schedule_day" value = "일"/> 일
+         			<input type = "checkbox" class = "select_checkbox"  name = "schedule_day" value = "월"/> 월
+         			<input type = "checkbox" class = "select_checkbox"  name = "schedule_day" value = "화"/> 화 
+         			<input type = "checkbox" class = "select_checkbox"  name = "schedule_day" value = "수"/> 수
+         			<input type = "checkbox" class = "select_checkbox"  name = "schedule_day" value = "목"/> 목
+         			<input type = "checkbox" class = "select_checkbox"  name = "schedule_day" value = "금"/> 금
+         			<input type = "checkbox" class = "select_checkbox"  name = "schedule_day" value = "토"/> 토
          		</div>
          		
          		<div class = "select_div kor_font">
-			        <label for="day-select2" class="kor_font">Date |  </label>
-			        <select id="day-select2" name="repeat_date">
+			        <label for="schedule_date-select" class="kor_font">Date |  </label>
+			        <select id="schedule_date-select" name="schedule_date-select"  onchange = "selectScheduleDate(this)">
 					    <option value="">날짜 선택</option>
 					</select>
 					
 					<script>
-					    const select2 = document.getElementById("day-select2");
+					    const select2 = document.getElementById("schedule_date-select");
 					    
 					    for (let i = 1; i <= 31; i++) {
 					        let option = document.createElement("option");
@@ -820,7 +958,9 @@
 					        select2.appendChild(option);
 					    }
 					</script>
-			        <label for="day-select2" class="kor_font"> 일 </label>
+			        <label for="schedule_date-select" class="kor_font"> 일 </label>
+			        
+			        <label id = "schedule_date_selected">&nbsp;</label>
          		</div>
          	</form>
          </div>

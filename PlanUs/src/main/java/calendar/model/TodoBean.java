@@ -6,6 +6,9 @@ public class TodoBean {
 	private String t_name; // title
 	private String t_ok_yn; // yes or no
 	
+	private String r_type; // repeate day(0) or date(1)
+	private String r_detail; // repeate detail
+	
 	public String getT_cd() {
 		return t_cd;
 	}
@@ -29,5 +32,17 @@ public class TodoBean {
 	}
 	public void setT_ok_yn(String t_ok_yn) {
 		this.t_ok_yn = t_ok_yn;
+	}
+	public String getR_type() {
+		return r_type;
+	}
+	public void setR_type(String r_type) {
+		this.r_type = r_type;
+	}
+	public String getR_detail() {
+		return r_detail;
+	}
+	public void setR_detail(String r_detail) {
+		this.r_detail = r_detail;
 	}
 }

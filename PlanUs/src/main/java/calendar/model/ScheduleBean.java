@@ -9,6 +9,9 @@ public class ScheduleBean {
 	
 	private String g_name; // groups name
 	
+	private String r_type;
+	private String r_detail;
+	
 	public String getG_name() {
 		return g_name;
 	}
@@ -44,5 +47,17 @@ public class ScheduleBean {
 	}
 	public void setS_memo(String s_memo) {
 		this.s_memo = s_memo;
+	}
+	public String getR_type() {
+		return r_type;
+	}
+	public void setR_type(String r_type) {
+		this.r_type = r_type;
+	}
+	public String getR_detail() {
+		return r_detail;
+	}
+	public void setR_detail(String r_detail) {
+		this.r_detail = r_detail;
 	}
 }
