@@ -1,5 +1,6 @@
 package calendar.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +64,7 @@ public class CalendarController {
 		c_ym = y + m;
 		List<CalendarBean> calendarThisMonthList = calendarDao.getThisMonthCalendar(c_ym);
 		model.addAttribute("calendarList", calendarThisMonthList);
-
+		
 		// todo
 		 if(day < 10) {
 			 d = "-0" + d;
@@ -75,6 +76,22 @@ public class CalendarController {
 		 c_ymd = y + m + d;
 		 
 		List<TodoBean> todoList = todoDao.getTodayTodo(c_ymd);
+		List<TodoBean> todoList_n = new ArrayList<TodoBean>();
+		List<TodoBean> todoList_y = new ArrayList<TodoBean>();
+		
+		for(int i = 0; i < todoList.size(); i++) {
+			if(todoList.get(i).getT_ok_yn().equals("N")) {
+				todoList_n.add(todoList.get(i));
+			}
+			else {
+				todoList_y.add(todoList.get(i));
+			}
+		}
+		
+		todoList.clear();
+		todoList.addAll(todoList_n);
+		todoList.addAll(todoList_y);
+		
 		model.addAttribute("todoList", todoList);
 		
 		// schedule

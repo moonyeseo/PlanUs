@@ -6,11 +6,12 @@
   
   <mapper namespace = "calendar.model.Calendar">
   	<select id = "getThisMonthCalendar" resultType = "calendar.model.CalendarBean">
-  		SELECT * 
-  		FROM calendar
- 		WHERE TO_CHAR(c_ymd, 'yyyy-MM') = #{c_ym} 
- 					 AND c_type = 'S' 
- 					 AND u_cd = 'U000000001'
+  		SELECT calendar.c_cd, calendar.u_cd, calendar.r_cd, calendar.type_cd, calendar.c_type, TO_CHAR(calendar.c_ymd, 'dd') as c_ymd, schedule.s_cd , schedule.s_name, schedule.s_color
+  		FROM calendar, schedule
+ 		WHERE TO_CHAR(calendar.c_ymd, 'yyyy-MM') = #{c_ym} 
+ 					 AND calendar.c_type = 'S' 
+ 					 AND calendar.type_cd = schedule.s_cd
+ 					 AND calendar.u_cd = 'U000000001'
   	</select>
   	
   	<select id = "getTodayTodo" resultType = "calendar.model.TodoBean">
@@ -27,7 +28,7 @@
   	</select>
   	
   	<select id = "getTodaySchedule" resultType = "calendar.model.ScheduleBean">
-  		SELECT schedule.s_cd, schedule.u_cd, schedule.g_cd, schedule.s_name, schedule.s_memo, groups.g_name, repeat.r_type, repeat.r_detail
+  		SELECT schedule.s_cd, schedule.u_cd, schedule.g_cd, schedule.s_name, schedule.s_memo, groups.g_name, repeat.r_type, repeat.r_detail, schedule.s_color
   		FROM schedule
  		JOIN calendar
  				ON calendar.c_type = 'S' 

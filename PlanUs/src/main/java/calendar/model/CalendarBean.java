@@ -8,6 +8,10 @@ public class CalendarBean {
 	private String c_type; // T/ S/ D
 	private String c_ymd; // date
 	
+	private String s_cd;
+	private String s_name;
+	private String s_color;
+	
 	public String getC_cd() {
 		return c_cd;
 	}
@@ -43,5 +47,23 @@ public class CalendarBean {
 	}
 	public void setC_ymd(String c_ymd) {
 		this.c_ymd = c_ymd;
+	}
+	public String getS_cd() {
+		return s_cd;
+	}
+	public void setS_cd(String s_cd) {
+		this.s_cd = s_cd;
+	}
+	public String getS_name() {
+		return s_name;
+	}
+	public void setS_name(String s_name) {
+		this.s_name = s_name;
+	}
+	public String getS_color() {
+		return s_color;
+	}
+	public void setS_color(String s_color) {
+		this.s_color = s_color;
 	}
 }

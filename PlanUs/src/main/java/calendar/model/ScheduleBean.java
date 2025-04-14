@@ -6,6 +6,7 @@ public class ScheduleBean {
 	private String g_cd; // groups FK
 	private String s_name; // schedule title
 	private String s_memo; // schedule memo
+	private String s_color; // schedule font color
 	
 	private String g_name; // groups name
 	
@@ -59,5 +60,11 @@ public class ScheduleBean {
 	}
 	public void setR_detail(String r_detail) {
 		this.r_detail = r_detail;
+	}
+	public String getS_color() {
+		return s_color;
+	}
+	public void setS_color(String s_color) {
+		this.s_color = s_color;
 	}
 }

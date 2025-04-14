@@ -54,7 +54,7 @@
 	.arrow_btn{
 		color : #FF3B7C;
 	}
-	/* 요알 + 날짜 영역 */
+	/* 요일 + 날짜 영역 */
 	#day{
 		width : 100%;
 		height : 830px;
@@ -82,10 +82,16 @@
 	/* 날짜 */
 	.day {
 		display: flex;
+		flex-direction: column; 
 		width: calc(100%/ 7);
+		height : calc(100%/ 6);
 		text-align: left;
 		vertical-align: top;
 		padding-left : 5px;
+	}
+	.day a{
+		width: 100%;
+		height : 15px;
 	}
 	/* 토요일 */
 	.day:nth-child(7n)>a {
@@ -136,6 +142,10 @@
 	.current{
     	cursor: pointer;
 	}
+	.schedule_items{
+		width : 100%;
+		margin-top : 5px;
+	}
 	
 	/************* TO-DO, SCHEDULE ***************/
 	/* table */
@@ -151,16 +161,22 @@
 	   flex-shrink: 0; /* 입력창은 크기 조정 안 함 */
 	   margin-top: 10px;
 	}
-	.to-do_table_div,
-	.schedule_table_div{
+	.to-do_table_div{
 		margin-top : 30px;
-		max-height: 500px; /* 원하는 높이로 조절 */
+		max-height: 700px; /* 원하는 높이로 조절 */
 	    overflow-y: auto; /* 세로 스크롤 추가 */
 	    text-align: left;
 	}
 	.diary_table_div{
 		margin-top : 30px;
 		max-height: 500px; /* 원하는 높이로 조절 */
+	    text-align: left;
+	}
+	.schedule_table_div{
+		margin-top : 30px;
+		/*  aspect-ratio:1.2/1; */
+		max-height: 160px; /* 원하는 높이로 조절 */ 
+	    overflow-y: auto; /* 세로 스크롤 추가 */
 	    text-align: left;
 	}
 	#to-do_table td,
@@ -179,6 +195,24 @@
 	#to-do{
 		position: relative; /* 부모 요소 */
     	height: 100%;
+	}
+	.select_radio{
+		width:10px;
+   		height:10px;
+   		accent-color:#FF3B7C;
+	}
+	#schedule_color{
+	  width: 60px;
+	  height: 25px;
+	  -webkit-appearance: none;
+	  -moz-appearance: none;
+	  appearance: none;
+	  background-color: transparent;
+	  border: none;
+	  cursor : pointer;
+	}
+	#schedule_color::-webkit-color-swatch{
+	  	border: none;
 	}
 	
 	/*TO-DO checkbox*/
@@ -362,7 +396,18 @@
 		font-weight: 400;
 		font-style: normal;
    	}
-	
+	.calendar_font{
+	  word-break: keep-all;      /* 단어 중간에 끊지 않음 */
+	  white-space: normal;
+	  font-family: "Gowun Dodum", sans-serif;
+	  font-weight: 400;
+	  font-style: normal;
+      font-size:12px;
+  	  line-height: 1.2;
+  	  margin-top : 5px;
+      pointer-events: none;
+	  width: 100%;
+	}
 	/*화면크기가 1000px보다 클 때 */
    @media screen and (min-width:1000px){
 		#calendar{
@@ -452,6 +497,18 @@
       #diary_table tr:nth-child(2){
       	height: 60%;
       }
+	.schedule_table_div{
+		margin-top : 30px;
+		max-height: 300px; /* 원하는 높이로 조절 */
+	    overflow-y: auto; /* 세로 스크롤 추가 */
+	    text-align: left;
+	}
+	.to-do_table_div{
+		margin-top : 30px;
+		max-height: 300px; /* 원하는 높이로 조절 */
+	    overflow-y: auto; /* 세로 스크롤 추가 */
+	    text-align: left;
+	}
    }
 </style>
 
@@ -473,12 +530,54 @@
 		var selectDate = new Date(year, month-1, day);
 		
 		calendarInit(selectDate);
+		
+		calendarSchedule();
 	});
+	
+	function calendarSchedule(){
+ 		var regex = /^[0-9]*$/;
+		
+		var day = 0;
+		var s_name = "";
+		var s_color = "";
+		
+		var day_arr = new Array(31);
+		for(var i = 0; i < day_arr.length; i++){
+			day_arr[i] = 0;
+		}
+		
+		$(".calendar_schedule").each(function(index, item){
+			if(regex.test($(this).val())){
+				day = $(this).val();
+			}
+			else if($(this).val().substr(0, 1) == "#"){
+				s_color = $(this).val();
+			}
+			else{
+				s_name = $(this).val();
+			}
+			
+			if(day != 0 && s_name != "" && s_color != ""){
+				if(day_arr[day - 1] == 3){
+					$("#" + day + "_schedule_items").append("<div class = 'calendar_font'>...</div>");
+				}
+				else if(day_arr[day - 1] < 3){
+					$("#" + day + "_schedule_items").append("<div class = 'calendar_font'> <span style = 'color : " + s_color +"'>" +  s_name + "</span></div>");
+					
+				}
+				
+				day_arr[day - 1]++;
+				day = 0;
+				s_name = "";
+				s_color = "";
+			}
+		});
+	}
 	
 	function getDate(date){
 		
 		if(date != todayDate){
-			day = $(date).text();
+			day = date;
 		}
 		else{
 			day = todayDate;
@@ -575,8 +674,8 @@
 			// this Month
 			for (var i = 1; i <= nextDate; i++) {
 				calendar.innerHTML = calendar.innerHTML
-						+ '<div id = "' + i + '" class="kor_font day current" onclick = "getDate(this)"><a href="javascript:void(0);" onClick = "getDate(this)">'
-						+ i + '</a></div>'
+						+ '<div id = "' + i + '" class="kor_font day current" onclick = "getDate(' + i  + ')"><a href="javascript:void(0);" onClick = "getDate(' + i  + ')" id = "a_' + i + '">'
+						+ i + '</a><div class = "schedule_items" id="' + i + '_schedule_items"></div>'
 			}
 			// next Month
 			for (var i = 1; i < (7 - nextDay == 7 ? 0 : 7 - nextDay); i++) {
@@ -680,6 +779,7 @@
 	 		var s_cd = schedule.getAttribute("id");
 	 		var g_name = $("#" + s_cd + "_g_name").text();
 			var s_name = $("#" + s_cd + "_s_name").text();
+			var s_color = $("#" + s_cd + "_s_color").val();
 			var s_memo = $("#" + s_cd + "_s_memo").val();
 			var r_type = $("#" + s_cd + "_r_type").val();
 			var r_detail = $("#" + s_cd + "_r_detail").val();
@@ -689,6 +789,7 @@
 			$("input[name=schedule_day]").prop("checked", false);
 			
 			$("#schedule_input").val(s_name);
+			$("#schedule_color").val(s_color);
 			$("#schedule_input").focus();
 			
 			$("#schedule_memo_input").val(s_memo);
@@ -735,6 +836,17 @@
 							<td><span id = "month_number"></span> <span id = "month_eng"></span></td>
 							<td><a href="javascript:;" class="go-next arrow_btn">▶</a></td>
 						</tr>
+						
+							<c:if test="${fn:length(calendarList) > 0}">
+		         				<c:forEach var = "calendar" items = "${calendarList}" varStatus = "status">
+								<tr>
+		         					<td> <input type = "hidden" id = "${calendar.c_cd }_c_ymd" class = "calendar_schedule c_ymd" value = "${calendar.c_ymd}"> </td>
+		         					<td> <input type = "hidden" id = "${calendar.s_cd}" class = "calendar_schedule s_name" value = "${calendar.s_name }"> </td>
+		         					<td> <input type = "hidden" id = "${calendar.s_cd}_s_color" class = "calendar_schedule s_color" value = "${calendar.s_color }"> </td>
+		         				</tr>
+		         				</c:forEach>
+	         				</c:if>	
+						
 					</table>
 				</div>
 			</td>
@@ -885,12 +997,13 @@
 					         				<p class="kor_font"> 
 						         				 <a href = "javascript:void(0);" onClick = "schedule_Click(this)" id = "${schedule.s_cd }">
 						         					<c:if test = "${not empty schedule.g_cd }">
-						         						<span id = "${schedule.s_cd }_g_name">${schedule.g_name }&nbsp;|</span>
+						         						<span id = "${schedule.s_cd }_g_name" style = "color:${schedule.s_color }">${schedule.g_name }&nbsp;|</span>
 						         					</c:if>
-						         						<span id = "${schedule.s_cd }_s_name">${schedule.s_name }</span>
+						         						<span id = "${schedule.s_cd }_s_name"  style = "color:${schedule.s_color }">${schedule.s_name }</span>
 					         					</a>
 					         				</p>
 					         				
+					         				<input type = "hidden" id = "${schedule.s_cd }_s_color" value = "${schedule.s_color }">
 					         				<input type = "hidden" id = "${schedule.s_cd }_s_memo" value = "${schedule.s_memo }">
 					         				<input type = "hidden" id = "${schedule.s_cd }_r_type" value = "${schedule.r_type }">
 					         				<input type = "hidden" id = "${schedule.s_cd  }_r_detail" value = "${schedule.r_detail }">
@@ -920,8 +1033,13 @@
          		</div>
          		
          		<div class = "select_div kor_font">
+         			 <label for="schedule_group-select" class="kor_font">Color |  </label>
+         			 <input type = "color" id = "schedule_color"/>
+         		</div>
+         		
+         		<div class = "select_div kor_font">
          			 <label for="schedule_group-select" class="kor_font">Group |  </label>
-         			 	<select id="schedule_group-select" name="schedule_group-select">
+         			 <select id="schedule_group-select" name="schedule_group-select">
 					    <option value="">모임 선택</option>
 					</select>
          		</div>
