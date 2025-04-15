@@ -16,61 +16,79 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import users.model.usersBean;
 import users.model.usersDao;
 
+
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+import javax.validation.Valid;
 @Controller
 public class usersController {
 
-	private final String Command = "/1.users";
-	
-	final String getPage = "usersHome";  // UsersPage.
 
 	@Autowired
 	usersDao uDao;
 	
 	@RequestMapping("login.users")
     public String login(Model model){
-        model.addAttribute("data","회원 가입하시오");
+        
         return "login";
     }
 	@RequestMapping("join.users")
     public String join(Model model){
-        model.addAttribute("data","회원 가입하시오");
+        
         return "join";
     }
-	@RequestMapping("joinDetail.users")
-    public String joinDetail(Model model){
-        model.addAttribute("data","회원 가입하시오");
-        return "joinDetail";
-    }
-	
-	@RequestMapping(value = Command, method = RequestMethod.POST)
-	public ModelAndView start(
-			@RequestParam(value = "U_CD", required = false) String U_CD,
-			@RequestParam(value = "U_ID", required = false) String U_ID,
-			@RequestParam(value = "U_NAME", required = false) String U_NAME,
-			@RequestParam(value = "U_PHONE", required = false) String U_PHONE,
-			@RequestParam(value = "U_ACN", required = false) String U_ACN,
-			@RequestParam(value = "B_NAME", required = false) String B_NAME,
-			@RequestParam(value = "U_BIRTH", required = false) String U_BIRTH,
-			HttpServletRequest request,
-			HttpServletResponse response,
-			HttpSession session) throws IOException, ParseException {
-
-		System.out.println("DB(USERS) U_CD : " + U_CD);
-		System.out.println("DB(USERS) U_ID : " + U_ID);
-		System.out.println("DB(USERS) U_NAME : " + U_NAME);
-		System.out.println("DB(USERS) U_PHONE : " + U_PHONE);
-		System.out.println("DB(USERS) U_ACN : " + U_ACN);
-		System.out.println("DB(USERS) B_NAME : " + B_NAME);
-		System.out.println("DB(USERS) U_BIRTH : " + U_BIRTH);
-
+	@RequestMapping(value="joinDetail.users", method=RequestMethod.POST)
+	public ModelAndView doAction(String u_ID, String u_PWD) {
 		ModelAndView mav = new ModelAndView();
-
-		PrintWriter out = response.getWriter();
-
-		mav.setViewName(getPage);
-		return mav;
+		//System.out.println(user.getU_ID()+user.getU_PWD());
+		//mav.addObject("u_ID",user.getU_ID());
+		//mav.addObject("u_PWD",user.getU_PWD());
+		System.out.println(u_ID+" "+u_PWD);
+		mav.addObject("u_ID",u_ID);
+		mav.addObject("u_PWD",u_PWD);
+		mav.setViewName("joinDetail");
+		
+		
+        return mav;
+    }
+	/*@RequestMapping(value="insertUser.users", method=RequestMethod.POST)
+	public ModelAndView doAction(@ModelAttribute("join2") usersBean user) {
+		ModelAndView mav = new ModelAndView();
+		System.out.println(user.getU_ID()+user.getU_PWD()+user.getB_NAME() +"두번쨰");
+		try {
+		    uDao.signUp(user);
+		    System.out.println("DB 저장 완료");
+		} catch (Exception e) {
+		    e.printStackTrace(); // 오류 메시지 출력
+		}
+		System.out.println("세번쨰");
+		mav.setViewName("login");
+		
+		
+        return mav;
+    }*/
+	
+	@RequestMapping(value="insertUser.users", method=RequestMethod.POST)
+	public ModelAndView doAction(@ModelAttribute("join2") usersBean user) {
+	    ModelAndView mav = new ModelAndView();
+	    System.out.println(user.getU_ID()+user.getU_PWD()+user.getB_NAME() +"두번쨰");
+	    try {
+	        uDao.signUp(user);
+	        System.out.println("DB 저장 완료");
+	        mav.setViewName("login");
+	    } catch (Exception e) {
+	        e.printStackTrace(); // 오류 메시지 출력
+	        System.err.println("회원가입 중 오류 발생: " + e.getMessage());
+	        mav.addObject("errorMessage", "회원가입 중 오류가 발생했습니다.");
+	        mav.setViewName("joinDetail"); // 오류 발생 시 회원가입 페이지로 다시 이동
+	    }
+	    System.out.println("세번쨰");
+	    return mav;
 	}
 
 }

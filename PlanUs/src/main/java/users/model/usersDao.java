@@ -10,6 +10,11 @@ public class usersDao {
 	@Autowired
 	SqlSessionTemplate sqlSessionTemplate;
 	
-	private String namespace = "users.model.Users";
+	private String namespace = "users.model.users";
+	
+	public void signUp(usersBean user) {
+		System.out.println("DAO");
+		sqlSessionTemplate.insert("users.model.users.signUp",user );
+	}
 	
 }

@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file="../common/mainMenu.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <style>
 
 .input-field {
@@ -114,28 +117,28 @@ margin-top:50px;
             <div class="state_title">
                 <p class="oswald-title">LOGIN !</p>
             </div>
-            <form>
-             <div class="login_input">
+            <form:form id="join_form" commandName="join" action="joinDetail.users" method="post">
+             	<div class="login_input">
                 
                     <label for="login-input" class="oswald-title">ID</label>
-                    <input type="text" id="login-input" class="input-field kor_font" placeholder="ID" >
-                	<div class = "check_btn">
+                    <input type="text" id="login-input" class="input-field kor_font" placeholder="ID" name="u_ID" >
+                	<!-- <div class = "check_btn">
             
-            <input type = "button" value = "중복 체크"  class = "oswald-menu btn kor_font" onClick="location.href='joinDetail.users'"/>
-         </div>
-            </div>
-            <div class="pw_input">
+            		<input type = "button" value = "중복 체크"  class = "oswald-menu btn kor_font" onClick="location.href='joinDetail.users'"/>
+         			</div>-->
+            	</div>
+            	<div class="pw_input">
                
                     <label for="pw-input" class="oswald-title">PW</label>
-                    <input type="password" id="pw-input" class="input-field kor_font" placeholder="PASSWORD">
+                    <input type="password" id="pw-input" class="input-field kor_font" placeholder="PASSWORD" name="u_PWD">
                
-            </div>
-            <div class = "login_btn">
+            	</div>
+            	<div class = "login_btn">
             
-            <input type = "button" value = "NEXT"  class = "oswald-menu btn" onClick="location.href='joinDetail.users'"/>
-         </div>
+            		<input type = "submit" value = "NEXT"  class = "oswald-menu btn"/>
+         		</div>
          
-            </form>
+            </form:form>
             
         </div>
     </div>

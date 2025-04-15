@@ -186,35 +186,37 @@ display: flex;
             <div class="state_title">
                 <p class="oswald-title">LOGIN !</p>
             </div>
-            <form>
+            <form:form id="join2_form" commandName="join2" action="insertUser.users" method="post">
+             <input type="hidden" name="u_ID" value="${u_ID}" />
+             <input type="hidden" name="u_PWD" value="${u_PWD}" />
              <div class="name_input">
                 
                     <label for="login-input" class="oswald-title">NAME</label>
-                    <input type="text" id="name-input" class="input-field kor_font" placeholder="NAME">
+                    <input type="text" id="name-input" class="input-field kor_font" placeholder="NAME" name="u_NAME">
                 
             </div>
             <div class="nick_input">
                 
                     <label for="nick-input" class="oswald-title">NICKNAME</label>
-                    <input type="text" id="nick-input" class="input-field kor_font" placeholder="NICKNAME">
+                    <input type="text" id="nick-input" class="input-field kor_font" placeholder="NICKNAME" name="u_NICK">
                 
             </div>
             <div class="birth_input">
                 
                     <label for="pw-input" class="oswald-title">BIRTH</label>
-                    <input type="date" id="pw-input"max="2025-12-31" min="1900-01-01" value="" class="input-field kor_font" >
+                    <input type="date" id="pw-input"max="2025-12-31" min="1900-01-01" value="" class="input-field kor_font" name="u_BIRTH">
                 
             </div>
             <div class="phone_input">
                 
                     <label for="phone-input" class="oswald-title">PHONE</label>
-                    <input type="text" id="phone-input" class="input-field kor_font" placeholder="-없이 입력">
+                    <input type="text" id="phone-input" class="input-field kor_font" placeholder="-없이 입력" name="u_PHONE">
                 
             </div>
             <div class="custom-dropdown">
 			    <div class="bank_input" >
 			        <label for="bank-input" class="oswald-title">BANK</label>            
-			        <input type="text" id="bank-input" class="input-field kor_font" readOnly> <!-- readOnly로 수정하여 사용자가 직접 입력하지 않도록 설정 -->
+			        <input type="text" id="bank-input" class="input-field kor_font" readOnly name="b_NAME"> <!-- readOnly로 수정하여 사용자가 직접 입력하지 않도록 설정 -->
 			        <button type="button" class="dropdown-toggle" onclick="toggleDropdown(event)"></button>
 			    </div>
 			    <ul class="dropdown-menu">
@@ -228,13 +230,14 @@ display: flex;
             <div class="account_input">
                 
                     <label for="pw-input" class="oswald-title">ACCOUNT</label>
-                    <input type="text" id="account-input" class="input-field kor_font" placeholder="-없이 입력">
+                    <input type="text" id="account-input" class="input-field kor_font" placeholder="-없이 입력" name="u_ACN">
                 
-            </div>                        
-            </form>
-           <div class = "login_btn">            
-            <input type = "button" value = "JOIN"  class = "oswald-menu btn" onClick="location.href='join.users'"/>
-         </div>     
+            </div>     
+            	<div class = "login_btn">            
+            	<input type = "submit" value = "JOIN"  class = "oswald-menu btn"/>
+         		</div>                     
+            </form:form>
+              
         </div>
     </div>
     <script>

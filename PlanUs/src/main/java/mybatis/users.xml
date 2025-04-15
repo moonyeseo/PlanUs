@@ -4,5 +4,15 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-  <mapper namespace = "users.model.Users">
+  <mapper namespace = "users.model.users">
+  <insert id="signUp" parameterType="users.model.usersBean">
+    insert into users values (
+        (SELECT CASE WHEN EXISTS(SELECT 1 FROM USERS)
+                     THEN (SELECT 'U' || LPAD(TO_NUMBER(SUBSTR(MAX(U_CD), 2, 10)) + 1, 9, '0')
+                           FROM USERS)
+                     ELSE 'U000000001' END FROM DUAL),
+        #{u_ID}, #{u_PWD}, #{u_NAME}, #{u_NICK},
+        #{u_PHONE}, #{u_ACN}, #{b_NAME}, #{u_BIRTH}
+    )
+</insert>
   </mapper>
