@@ -294,6 +294,7 @@
 		width : 80px;
 		height : 35px;
 		font-size : 17px;
+		cursor : pointer;
 	}
 	
 	/************* 입력창 ***************/
@@ -823,6 +824,12 @@
 		function deleteScheduleDate(schedule_date){
 			$(schedule_date).remove();
 		}
+		
+		/****************** DIARY ******************/
+		function writeDiary(){
+			$(".diary_table_div").empty();
+			$(".diary_table_div").load("writeDiaryForm.calendar");
+		}
 </script>
 
 <div id = "calendar_main">
@@ -1119,7 +1126,7 @@
 					<tr>
 						<td>
 							<c:if test="${empty diary}">
-				         			<input type = "button" value = "WRITE" class = "oswald-menu btn"/>
+				         			<input type = "button" value = "WRITE" class = "oswald-menu btn" onClick = "writeDiary()"/>
 				         	</c:if>
 				         	<c:if test="${not empty diary}">
 				         			<input type = "button" value = "MODIFY" class = "oswald-menu btn"/>
