@@ -51,4 +51,43 @@
  					 AND  TO_CHAR(calendar.c_ymd, 'yyyy-MM-dd') = #{c_ymd} 
  					 AND diary.u_cd = 'U000000001'
   	</select>
+  	
+  	<insert id = "insertDiary">
+  		INSERT INTO diary VALUES(
+  		(SELECT 'D' || lpad(to_number(substr(max(d_cd),2,10)) + 1,9,'0') FROM diary)
+  			, 'U000000001', #{d_title}, #{d_detail})
+  	</insert>
+  	
+  	<select id = "getRecentD_cd" resultType = "string">
+  		SELECT MAX(d_cd)
+  		FROM diary
+  		WHERE diary.u_cd = 'U000000001'
+  	</select>
+  	
+  	<insert id = "insertCalendarDiary">
+  		INSERT INTO calendar VALUES(
+  		(SELECT 'C' || lpad(to_number(substr(max(c_cd),2,10)) + 1,9,'0') FROM calendar)
+  			, 'U000000001', NULL, #{d_cd}, 'D', #{d_title})
+  	</insert>
+  	
+  	<select id = "getDiaryByDcd"  resultType = "calendar.model.DiaryBean">
+  	  	SELECT * 
+  		FROM diary
+  		WHERE d_cd = #{d_cd}
+ 					 AND diary.u_cd = 'U000000001'
+  	</select>
+  	
+  	<update id = "modifyDiary">
+  		UPDATE diary
+  		SET d_title = #{d_title}, d_detail = #{d_detail}
+  		WHERE d_cd = #{d_cd}
+  	</update>
+  	
+  	<delete id = "deleteDiary">
+  		DELETE FROM diary WHERE d_cd = #{d_cd}
+  	</delete>
+  	
+  	<delete id = "deleteCalendarDiary">
+  		DELETE FROM calendar WHERE type_cd = #{d_cd}
+  	</delete>
   </mapper>

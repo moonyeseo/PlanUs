@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <style>
 	/************* WRITE DIARY ***************/
@@ -122,25 +126,183 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#diary-input-title").focus();
+		
+		$("#diary-input-title").click(function(){
+			$("#d_title_valid").text("");
+		})
+		$("#diary-input-title").keydown(function(){
+			$("#d_title_valid").text("");
+		})
+		
+		$("#diary_contents").click(function(){
+			 $("#d_detail_valid").text("");
+		})
+		$("#diary_contents").keydown(function(){
+			 $("#d_detail_valid").text("");
+		})
+		
+		$("#diary_form").on('submit', function(e){
+			 e.preventDefault(); // 기본 submit 막기
+			 
+			 if($("#diary-input-title").val() == ""){
+				 $("#d_title_valid").text("제목 입력해주세요ㅠ^ㅠ");
+				 $("#diary-input-title").focus();
+				 
+				 return;
+			 }
+			 
+			 if($("#diary_contents").val() == ""){
+				 $("#d_detail_valid").text("내용 입력해주세요ㅠ^ㅠ");
+				 $("#diary_contents").focus();
+				 
+				 return;
+			 }
+			 
+			 $.ajax({
+				 url : 'insertDiary.calendar',
+				 method : 'POST',
+				 data :{
+					 d_title : $("#diary-input-title").val(),
+					 d_detail : $("#diary_contents").val(),
+					 year : $("#diary_year").val(),
+					 month : $("#diary_month").val(),
+					 day : $("#diary_day").val()
+				 },
+				 success : function(response){
+					 if(response == 'Y'){
+						 diary();
+					 }
+				 },
+				 error: function(jqXHR, textStatus, errorThrown) {
+					  alert("에러 발생!\n상태: " + textStatus + "\n에러: " + errorThrown + "\n서버 응답: " + jqXHR.responseText);
+					}
+			 });
+		});
 	});
+	
+	function modifyDiary(d_cd){
+		 if($("#diary-input-title").val() == ""){
+			 $("#d_title_valid").text("제목 입력해주세요ㅠ^ㅠ");
+			 $("#diary-input-title").focus();
+			 
+			 return;
+		 }
+		 
+		 if($("#diary_contents").val() == ""){
+			 $("#d_detail_valid").text("내용 입력해주세요ㅠ^ㅠ");
+			 $("#diary_contents").focus();
+			 
+			 return;
+		 }
+		
+		 $.ajax({
+			 url : 'modifyDiary.calendar',
+			 method : 'POST',
+			 data :{
+				 d_cd : d_cd,
+				 d_title : $("#diary-input-title").val(),
+				 d_detail : $("#diary_contents").val(),
+				 year : $("#diary_year").val(),
+				 month : $("#diary_month").val(),
+				 day : $("#diary_day").val()
+			 },
+			 success : function(response){
+				 if(response == 'Y'){
+					 diary();
+				 }
+			 },
+			 error: function(jqXHR, textStatus, errorThrown) {
+				  alert("에러 발생!\n상태: " + textStatus + "\n에러: " + errorThrown + "\n서버 응답: " + jqXHR.responseText);
+				}
+		 });
+	}
+	
+ 	function diary(){
+		var year = <%=request.getParameter("year")%>;
+		var month = <%=request.getParameter("month")%>;
+		var day = <%=request.getParameter("day")%>;
+		
+		$(".diary_table_div").empty();
+		$(".diary_table_div").load("diary.calendar?year=" + year + "&month=" + month + "&day=" + day);
+	} 
 </script>
 
-<table id = "diary_table">
-		<tr>
-			<td id = "diary_title" class = "kor_font">
-				<input type = "text" placeholder = "제목 입력.." class="kor_font" id = "diary-input-title">
-			</td>
-		</tr>
+<%-- <form:form id="diary_form" commandName="diary" action="insertDiary.calendar" method="post">
+	<input type = "hidden" value = "${year }" name = "year" id = "year">
+	<input type = "hidden" value = "${month }" name = "month" id = "month">
+	<input type = "hidden" value = "${day }" name = "day" id = "">
+
+	<table id = "diary_table"> 
+			<tr>
+				<td id = "diary_title" class = "kor_font">
+					<input type = "text" placeholder = "제목 입력.." class="kor_font" id = "diary-input-title" name = "d_title">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<textarea id = "diary_contents"  class="diary-input-contents kor_font" placeholder = "내용 입력.." name = "d_detail"></textarea>
+				</td>
+			</tr>
+		
 		<tr>
 			<td>
-				<textarea id = "diary_contents"  class="diary-input-contents kor_font" placeholder = "내용 입력.."></textarea>
+	   			<input class="check_button" type="submit" value="">
+				<input class="delete_button" type="button" value="" onClick = "diary()">
 			</td>
 		</tr>
+	</table>
+</form:form> --%>
+
+<form id="diary_form" >
+	<input type = "hidden" value = "${year }" id = "diary_year">
+	<input type = "hidden" value = "${month }" id = "diary_month">
+	<input type = "hidden" value = "${day }"  id = "diary_day">
+
+	<c:if test = "${empty diary }">
+		<table id = "diary_table"> 
+				<tr>
+					<td id = "diary_title" class = "kor_font">
+						<input type = "text" placeholder = "제목 입력.." class="kor_font" id = "diary-input-title" >
+						<br><span id = "d_title_valid" class = "vaild_font"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<textarea id = "diary_contents"  class="diary-input-contents kor_font" placeholder = "내용 입력.."></textarea>
+						<br><span id = "d_detail_valid"  class = "vaild_font"></span>
+					</td>
+				</tr>
+			
+			<tr>
+				<td>
+		   			<input class="check_button" type="submit" value="">
+					<input class="delete_button" type="button" value="" onClick = "diary()">
+				</td>
+			</tr>
+		</table>
+	</c:if>
 	
-	<tr>
-		<td>
-   			<input class="check_button" type="submit" value="">
-			<input class="delete_button" type="submit" value="">
-		</td>
-	</tr>
-</table>
+	<c:if test = "${not empty diary }">
+		<table id = "diary_table"> 
+				<tr>
+					<td id = "diary_title" class = "kor_font">
+						<input type = "text" class="kor_font" id = "diary-input-title" value = "${diary.d_title }">
+						<br><span id = "d_title_valid" class = "vaild_font"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<textarea id = "diary_contents"  class="diary-input-contents kor_font" >${diary.d_detail }</textarea>
+						<br><span id = "d_detail_valid"  class = "vaild_font"></span>
+					</td>
+				</tr>
+			
+			<tr>
+				<td>
+		   			<input class="check_button" type="button" value="" onClick = "modifyDiary('${diary.d_cd }')">
+					<input class="delete_button" type="button" value="" onClick = "diary()">
+				</td>
+			</tr>
+		</table>
+	</c:if>
+</form>

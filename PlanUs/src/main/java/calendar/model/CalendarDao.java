@@ -21,4 +21,32 @@ public class CalendarDao {
 		 
 		 return calendarThisMonthList;
 	 }
+
+	public void insertCalendarDiary(DiaryBean diary) {
+		int cnt = -1;
+		cnt = sqlSessionTemplate.insert(namespace + ".insertCalendarDiary", diary);
+		
+		if(cnt == -1) {
+			System.out.println("calendar diary insert 실패");
+		}
+		else if(cnt > 0) {
+			System.out.println("calendar diary insert 성공");
+		}
+		
+	}
+
+	public void deleteCalendarDiary(String d_cd) {
+		int cnt = -1;
+		cnt = sqlSessionTemplate.delete(namespace + ".deleteCalendarDiary", d_cd);
+		
+		if(cnt == -1) {
+			System.out.println("calendar diary delete 실패");
+		}
+		else if(cnt > 0) {
+			System.out.println("calendar diary delete 성공");
+		}
+		else {
+			System.out.println("calendar diary delete 레코드 못찾음");
+		}
+	}
 }

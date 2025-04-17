@@ -41,6 +41,14 @@
 	  font-style: normal;
       font-size:14px;
 	}
+	.vaild_font{
+	  font-family: "Gowun Dodum", sans-serif;
+	  font-weight: 400;
+	  font-style: normal;
+      font-size:13px;
+      color : #FF3B7C;
+      margin-left : 5px;
+	}
 	#main_menu {
 	 	height : 110px;
 		display : inline-block;

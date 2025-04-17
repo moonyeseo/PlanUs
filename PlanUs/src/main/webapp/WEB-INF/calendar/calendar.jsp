@@ -533,7 +533,14 @@
 		calendarInit(selectDate);
 		
 		calendarSchedule();
+		
+		load_diary(year, month, day);
 	});
+	
+	function load_diary(year, month, day){
+		$(".diary_table_div").empty();
+		$(".diary_table_div").load("diary.calendar?year=" + year + "&month=" + month + "&day=" + day);
+	}
 	
 	function calendarSchedule(){
  		var regex = /^[0-9]*$/;
@@ -824,12 +831,6 @@
 		function deleteScheduleDate(schedule_date){
 			$(schedule_date).remove();
 		}
-		
-		/****************** DIARY ******************/
-		function writeDiary(){
-			$(".diary_table_div").empty();
-			$(".diary_table_div").load("writeDiaryForm.calendar");
-		}
 </script>
 
 <div id = "calendar_main">
@@ -1099,42 +1100,6 @@
 			</div>
 			
 			<div class = "diary_table_div">
-				<table id = "diary_table">
-			         <c:if test="${empty diary}">
-	         			<tr style = "padding-top : 0px">
-	         				<td><label class="kor_font" style = "color : gray; padding-left : 30px;"> 오늘의 일기를 등록해주세요 :)</label>	</td>
-	         			</tr>
-	         			<tr><td></td></tr>
-	         		</c:if>
-	         		
-			        <c:if test="${not empty diary}">
-						<tr>
-							<td id = "diary_title" class = "kor_font">
-								${diary.d_title }
-								<hr id = "diary_underline">
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<textarea readonly id = "diary_contents"  class = "kor_font">
-									${diary.d_detail}
-								</textarea>
-							</td>
-						</tr>
-					</c:if>
-					
-					<tr>
-						<td>
-							<c:if test="${empty diary}">
-				         			<input type = "button" value = "WRITE" class = "oswald-menu btn" onClick = "writeDiary()"/>
-				         	</c:if>
-				         	<c:if test="${not empty diary}">
-				         			<input type = "button" value = "MODIFY" class = "oswald-menu btn"/>
-									<input type = "button" value = "DELETE"  class = "oswald-menu btn"/>
-				         	</c:if>
-						</td>
-					</tr>
-				</table>
 			</div>
 		</div>
 	</div>
