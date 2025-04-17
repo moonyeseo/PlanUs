@@ -49,6 +49,12 @@
       color : #FF3B7C;
       margin-left : 5px;
 	}
+	.modal_font{
+	  font-family: "Gowun Dodum", sans-serif;
+	  font-weight: 600;
+	  font-style: normal;
+      font-size:20px;
+	}
 	#main_menu {
 	 	height : 110px;
 		display : inline-block;

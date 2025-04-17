@@ -4,6 +4,25 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<style>
+	.modal{
+		position : absolute;
+		display : none;
+		justify-content: center;
+        top : 25%;
+        left : 25%;
+		width:50%;
+        height:45%;
+		background-color: #DEDEDE;
+		border : 3px solid white; 
+		/* background-color: #FF3B7C;
+		border : 3px solid  white;  */
+		color : white;
+		border-radius: 10px;
+		box-shadow:0 2px 3px 0 rgba(34,36,38,0.15);
+	}
+</style>
+
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
 	function writeDiary(d_cd){
@@ -13,6 +32,18 @@
 		
 		$(".diary_table_div").empty();
 		$(".diary_table_div").load("writeDiaryForm.calendar?year=" + year + "&month=" + month + "&day=" + day + "&d_cd=" + d_cd);
+	}
+	
+	function showDeleteModal(d_cd){
+		$(".delete_modal").css("display", "flex");
+		
+		$("#deleteMoal_delete").click(function(){
+			deleteDiary(d_cd);
+		});
+		
+		$("#deleteMoal_cancel").click(function(){
+			$(".delete_modal").css("display", "none");
+		});
 	}
 	
 	function deleteDiary(d_cd){
@@ -38,6 +69,23 @@
 		 });
 	}
 </script>
+
+<div class = "modal delete_modal">
+	<table>
+		<tr>
+			<td>
+				<h2 class = "modal_font">삭제 하시겠습니까?</h2>
+				<p class = "kor_font">※복구 불가능※</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type = "button" value = "DELETE" class = "oswald-menu btn" id = "deleteMoal_delete"/>
+				<input type = "button" value = "CANCEL"  class = "oswald-menu btn" id = "deleteMoal_cancel">
+			</td>
+		</tr>
+	</table>
+</div>
 
 <table id = "diary_table">
         <c:if test="${empty diary}">
@@ -68,7 +116,7 @@
          	</c:if>
          	<c:if test="${not empty diary}">
          			<input type = "button" value = "MODIFY" class = "oswald-menu btn" onClick = "writeDiary('${diary.d_cd}')"/>
-					<input type = "button" value = "DELETE"  class = "oswald-menu btn" onClick = "deleteDiary('${diary.d_cd}')"/>
+					<input type = "button" value = "DELETE"  class = "oswald-menu btn" onClick = "showDeleteModal('${diary.d_cd}')"/>
          	</c:if>
 		</td>
 	</tr>
