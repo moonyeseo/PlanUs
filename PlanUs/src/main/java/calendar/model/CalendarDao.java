@@ -49,4 +49,17 @@ public class CalendarDao {
 			System.out.println("calendar diary delete 레코드 못찾음");
 		}
 	}
+
+	public void insertCalendarSchedule(CalendarBean calendar) {
+		int cnt = -1;
+		cnt = sqlSessionTemplate.insert(namespace + ".insertCalendarSchedule", calendar);
+		
+		if(cnt == -1) {
+			System.out.println("calendar schedule insert 실패");
+		}
+		else if(cnt > 0) {
+			System.out.println("calendar schedule insert 성공");
+		}
+		
+	}
 }

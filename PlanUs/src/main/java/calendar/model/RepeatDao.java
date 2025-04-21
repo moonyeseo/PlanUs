@@ -13,4 +13,22 @@ public class RepeatDao {
 	  SqlSessionTemplate sqlSessionTemplate;
 	
 	 private String namespace = "calendar.model.Calendar";
+
+	public void insertRepeat(RepeatBean repeat) {
+		int cnt = -1;
+		cnt = sqlSessionTemplate.insert(namespace + ".insertRepeat", repeat);
+		
+		if(cnt == -1) {
+			System.out.println("repeat insert 실패");
+		}
+		else if(cnt > 0) {
+			System.out.println("repeat insert 성공");
+		}
+	}
+
+	public String getRecentR_cd() {
+		String r_cd = sqlSessionTemplate.selectOne(namespace + ".getRecentR_cd");
+		
+		return r_cd;
+	}
 }

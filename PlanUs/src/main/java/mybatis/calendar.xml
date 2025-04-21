@@ -90,4 +90,33 @@
   	<delete id = "deleteCalendarDiary">
   		DELETE FROM calendar WHERE type_cd = #{d_cd}
   	</delete>
+  	
+  	<insert id = "insertSchedule">
+  		INSERT INTO schedule VALUES(
+  		(SELECT 'S' || lpad(to_number(substr(max(s_cd),2,10)) + 1,9,'0') FROM schedule)
+  			, 'U000000001', #{g_cd, jdbcType=VARCHAR}, #{s_name}, #{s_memo, jdbcType=VARCHAR}, #{s_color})
+  	</insert>
+  	
+  	<select id = "getRecentS_cd" resultType = "string">
+  		SELECT MAX(s_cd)
+  		FROM schedule
+  		WHERE schedule.u_cd = 'U000000001'
+  	</select>
+  	
+  	<insert id = "insertRepeat">
+  		INSERT INTO repeat VALUES(
+  		(SELECT 'R' || lpad(to_number(substr(max(r_cd),2,10)) + 1,9,'0') FROM repeat)
+  			, #{c_type}, #{type_cd}, #{r_type}, #{r_detail, jdbcType=VARCHAR})
+  	</insert>
+  	
+  	<select id = "getRecentR_cd" resultType = "string">
+  		SELECT MAX(r_cd)
+  		FROM repeat
+  	</select>
+  	
+  	<insert id = "insertCalendarSchedule">
+  		INSERT INTO calendar VALUES(
+  		(SELECT 'C' || lpad(to_number(substr(max(c_cd),2,10)) + 1,9,'0') FROM calendar)
+  			, 'U000000001', #{r_cd, jdbcType=VARCHAR}, #{type_cd}, 'S', #{c_ymd})
+  	</insert>
   </mapper>

@@ -4,25 +4,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<style>
-	.modal{
-		position : absolute;
-		display : none;
-		justify-content: center;
-        top : 25%;
-        left : 25%;
-		width:50%;
-        height:45%;
-		background-color: #DEDEDE;
-		border : 3px solid white; 
-		/* background-color: #FF3B7C;
-		border : 3px solid  white;  */
-		color : white;
-		border-radius: 10px;
-		box-shadow:0 2px 3px 0 rgba(34,36,38,0.15);
-	}
-</style>
-
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
 	function writeDiary(d_cd){
@@ -32,17 +13,17 @@
 		
 		$(".diary_table_div").empty();
 		$(".diary_table_div").load("writeDiaryForm.calendar?year=" + year + "&month=" + month + "&day=" + day + "&d_cd=" + d_cd);
-	}
+	}	
 	
 	function showDeleteModal(d_cd){
-		$(".delete_modal").css("display", "flex");
+		$("#diary_delete_modal").css("display", "flex");
 		
-		$("#deleteMoal_delete").click(function(){
+		$("#diary_deleteModal_delete").click(function(){
 			deleteDiary(d_cd);
 		});
 		
-		$("#deleteMoal_cancel").click(function(){
-			$(".delete_modal").css("display", "none");
+		$("#diary_deleteModal_cancel").click(function(){
+			$("#diary_delete_modal").css("display", "none");
 		});
 	}
 	
@@ -70,7 +51,7 @@
 	}
 </script>
 
-<div class = "modal delete_modal">
+<div class = "modal delete_modal" id = "diary_delete_modal">
 	<table>
 		<tr>
 			<td>
@@ -80,13 +61,13 @@
 		</tr>
 		<tr>
 			<td>
-				<input type = "button" value = "DELETE" class = "oswald-menu btn" id = "deleteMoal_delete"/>
-				<input type = "button" value = "CANCEL"  class = "oswald-menu btn" id = "deleteMoal_cancel">
+				<input type = "button" value = "DELETE" class = "oswald-menu btn deleteModal_delete" id = "diary_deleteModal_delete"/>
+				<input type = "button" value = "CANCEL"  class = "oswald-menu btn deleteModal_cancel"  id = "diary_deleteModal_cancel"/>
 			</td>
 		</tr>
 	</table>
 </div>
-
+ 
 <table id = "diary_table">
         <c:if test="${empty diary}">
       			<tr style = "padding-top : 0px">

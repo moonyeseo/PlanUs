@@ -29,8 +29,6 @@ public class CalendarController {
 	private TodoDao todoDao;
 	@Autowired
 	private ScheduleDao scheduleDao;
-	@Autowired
-	private DiaryDao diaryDao;
 	
 	@RequestMapping(value = "go.calendar", method = RequestMethod.GET)
 	public String doAction(
@@ -95,8 +93,10 @@ public class CalendarController {
 		model.addAttribute("todoList", todoList);
 		
 		// schedule
-		List<ScheduleBean> scheduleList = scheduleDao.getTodaySchedule(c_ymd);
-		model.addAttribute("scheduleList", scheduleList);
+		/*
+		 * List<ScheduleBean> scheduleList = scheduleDao.getTodaySchedule(c_ymd);
+		 * model.addAttribute("scheduleList", scheduleList);
+		 */
 		
 		return "calendar";
 	}

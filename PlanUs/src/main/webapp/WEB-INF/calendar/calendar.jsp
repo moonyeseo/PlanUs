@@ -7,6 +7,27 @@
 		color : #FF3B7C;
 	}
 	
+	/************* MODAL ***************/
+	.modal{
+		position : absolute;
+		display : none;
+		justify-content: center;
+        top : 25%;
+        left : 25%;
+		width:50%;
+        height:45%;
+		background-color: #DEDEDE;
+		border : 3px solid white; 
+		/* background-color: #FF3B7C;
+		border : 3px solid  white;  */
+		color : white;
+		border-radius: 10px;
+		box-shadow:0 2px 3px 0 rgba(34,36,38,0.15);
+	}
+	#schedule_delete_modal{
+		z-index : 100;
+	}
+	
 	/************* CALENDAR ***************/
 	/* 캘린더 전체 영역 */
 	#calendar_main{
@@ -215,6 +236,14 @@
 	  	border: none;
 	}
 	
+	#todo_day_div,
+	#todo_date_div,
+	#schedule_day_div,
+	#schedule_date_div{
+		display : none;
+		gap : 4px;
+	}
+	
 	/*TO-DO checkbox*/
 	.to-do_checkbox{
 	 	appearance: none; /* 기본(네이티브) 모양을 제거 */
@@ -248,7 +277,21 @@
 	    border-color: #363636;
 	    background-color: #363636;
 	}
-
+	
+	/*반복 checkbox*/
+	.select_repeat{
+   		appearance: none; /* 기본(네이티브) 모양을 제거 */
+	    box-sizing: border-box;
+	    border : 1px solid #363636;
+		width : 10px;
+		height : 10px;
+    	cursor: pointer;
+    	background-color: transparent;
+   	}
+	.select_repeat:checked{
+	    border-color: #FF3B7C;
+	    background-color: #FF3B7C;
+	}
 	/************* DIARY ***************/
 	#diary_table td{
 		text-align: left;
@@ -380,6 +423,18 @@
 	    background-repeat: no-repeat;
 		background-position:0px 0px;
 		background-size: 100% 100%;
+   	}
+   	.trash_button {
+   		background:url(resources/image/trash.png); 
+		width:20px;
+	 	height:20px;
+	 	border:none;
+		vertical-align:middle;
+		cursor:pointer;
+	    background-repeat: no-repeat;
+		background-position:0px 0px;
+		background-size: 100% 100%;
+		margin-left : 2px;
    	}
    	.input_div {
    		margin-bottom:7px;
@@ -535,11 +590,100 @@
 		calendarSchedule();
 		
 		load_diary(year, month, day);
+		load_schedule(year, month, day);
+		
+		$("input[name=s_name]").click(function(){
+			$("#s_name_valid").text("");
+		});
+		$("input[name=s_name]").keydown(function(){
+			$("#s_name_valid").text("");
+		});
+		
+		$("#schedule_form").submit(function(e){
+				e.preventDefault(); 
+				
+				var s_name = $("input[name=s_name]").val();
+				
+				if(s_name == ""){
+					$("#s_name_valid").text("일정 입력해주세요ㅠ^ㅠ");
+					$("input[name=s_name]").focus();
+					 
+					return;
+				}
+				
+				var s_color = $("input[name=s_color]").val();
+				var g_cd = $("input[name=g_cd]").val();
+				var s_memo = null;
+				s_memo = $("input[name=s_memo]").val();
+				var r_type = $("input[name=schedule_repeat]:checked").val();
+				
+				var r_detail = "";
+				var r_detail_arr = new Array();
+				if(r_type == "0"){
+					$("input:checkbox[name='schedule_day']").each(function(){
+						if($(this).is(":checked") == true){
+							r_detail_arr.push($(this).val());
+						}
+					});
+				}
+				else if(r_type == "1"){
+					r_detail_arr = $("#schedule_date_selected").text().replaceAll(",", "").replaceAll(" ", "").split("일");
+				}
+				
+				r_detail_arr.forEach(function(value) {
+				    if (value) {
+				        if (r_detail == "") {
+				            r_detail = value;
+				        } else {
+				            r_detail = r_detail + "," + value;
+				        }
+				    }
+				});
+				
+				if(r_detail == "일" || r_detail == " " || r_detail == "," || r_detail == ""){
+					r_detail = "";
+				}
+				 
+				if($("#s_cd").val() == ""){
+					 $.ajax({
+						 url : 'insertSchedule.calendar',
+						 method : 'POST',
+						 data :{
+							 s_name : s_name,
+							 s_color : s_color,
+							 g_cd : g_cd,
+							 s_memo : s_memo,
+							 r_type : r_type,
+							 r_detail : r_detail,
+							 year : year,
+							 month : month,
+							 day : day
+						 },
+						 success : function(response){
+							 if(response == 'Y'){
+								 resetSchedule();
+								 load_schedule(year, month, day);
+							 }
+						 },
+						 error: function(jqXHR, textStatus, errorThrown) {
+							  alert("에러 발생!\n상태: " + textStatus + "\n에러: " + errorThrown + "\n서버 응답: " + jqXHR.responseText);
+							}
+					 });
+				}
+				else{
+					alert("update 해야댐용");
+				}
+		});
 	});
 	
 	function load_diary(year, month, day){
 		$(".diary_table_div").empty();
 		$(".diary_table_div").load("diary.calendar?year=" + year + "&month=" + month + "&day=" + day);
+	}
+	
+	function load_schedule(year, month, day){
+		$(".schedule_table_div").empty();
+		$(".schedule_table_div").load("schedule.calendar?year=" + year + "&month=" + month + "&day=" + day);
 	}
 	
 	function calendarSchedule(){
@@ -739,6 +883,11 @@
 		
 		$("#todo_date_selected").html("");
 		$("input[name=todo_day]").prop("checked", false);
+
+		resetTodo();
+
+		$("#todo_trash_button").attr("type", "button");
+		$("#todo_trash_button").attr("onClick", "showTodoDeleteModal('" + t_cd + "')"); 
 		
 		$("#to-do_input").val(t_name);
 		$("#to-do_input").focus();
@@ -751,6 +900,9 @@
 		}
 		
 		if(r_type == "1"){
+			$("#todo_repeat_1").prop("checked", true);
+			repeatChange("1", "T");
+			
 			for(var i  = 0; i < r_detail_split.length; i++){
 				if($("#todo_date_selected").text().indexOf("일") == -1){
 					$("#todo_date_selected").html(" <a href = 'javascript:void(0);' onClick = 'deleteTodoDate(this)' class = 'delete_date' >" + r_detail_split[i] + "일</a>");
@@ -761,6 +913,9 @@
 			}
 		}
 		else if(r_type == "0"){
+			$("#todo_repeat_0").prop("checked", true);
+			repeatChange("0", "T");
+			
 			for(var i  = 0; i < r_detail_split.length; i++){
 				$("input[name=todo_day][value=" + r_detail_split[i] +"]").prop("checked", true);
 			}
@@ -781,6 +936,27 @@
 		$(todo_date).remove();
 	}
 	
+	function resetTodo(){
+		$("#todo_trash_button").attr("type", "hidden");
+		
+		$("input[name='todo_repeat']").each(function(){
+			$(this).prop("checked", false);
+		});
+		$("#todo_day_div").css("display", "none");
+		$("#todo_date_div").css("display", "none");
+	}
+	
+	function showTodoDeleteModal(t_cd){
+		$("#todo_delete_modal").css("display", "flex");
+		
+		$("#todo_deleteModal_delete").click(function(){
+			//deleteTodo(t_cd);
+		});
+		
+		$("#todo_deleteModal_cancel").click(function(){
+			$("#todo_delete_modal").css("display", "none");
+		});
+	}
 
 	/****************** SCHEDULE ******************/
 		function schedule_Click(schedule){
@@ -796,23 +972,40 @@
 			$("#schedule_date_selected").html("");
 			$("input[name=schedule_day]").prop("checked", false);
 			
+			resetSchedule();
+			
+			$("#s_cd").val(s_cd);
 			$("#schedule_input").val(s_name);
 			$("#schedule_color").val(s_color);
 			$("#schedule_input").focus();
 			
 			$("#schedule_memo_input").val(s_memo);
 			
+			$("#schedule_trash_button").attr("type", "button");
+			$("#schedule_trash_button").attr("onClick", "showScheduleDeleteModal('" + s_cd + "')"); 
+			
 			if(r_type == "1"){
-				for(var i  = 0; i < r_detail_split.length; i++){
-					if($("#schedule_date_selected").text().indexOf("일") == -1){
-						$("#schedule_date_selected").html(" <a href = 'javascript:void(0);' onClick = 'deleteScheduleDate(this)' class = 'delete_date' >" + r_detail_split[i] + "일</a>");
-					}
-					else{
-						$("#schedule_date_selected").html($("#schedule_date_selected").html() + "<a href =  'javascript:void(0);' onClick = 'deleteScheduleDate(this)' class = 'delete_date'> , " + r_detail_split[i] + "일</a>");
+				$("#schedule_repeat_1").prop("checked", true);
+				repeatChange("1", "S");
+				
+				if(r_detail_split.length > 0){
+					for(var i  = 0; i < r_detail_split.length; i++){
+						if(r_detail_split.length == 1 && r_detail_split[i] == ""){
+							$("#schedule_date_selected").html("");
+						}
+						else if($("#schedule_date_selected").text().indexOf("일") == -1){
+							$("#schedule_date_selected").html(" <a href = 'javascript:void(0);' onClick = 'deleteScheduleDate(this)' class = 'delete_date' >" + r_detail_split[i] + "일</a>");
+						}
+						else{
+							$("#schedule_date_selected").html($("#schedule_date_selected").html() + "<a href =  'javascript:void(0);' onClick = 'deleteScheduleDate(this)' class = 'delete_date'> , " + r_detail_split[i] + "일</a>");
+						}
 					}
 				}
 			}
 			else if(r_type == "0"){
+				$("#schedule_repeat_0").prop("checked", true);
+				repeatChange("0", "S");
+				
 				for(var i  = 0; i < r_detail_split.length; i++){
 					$("input[name=schedule_day][value=" + r_detail_split[i] +"]").prop("checked", true);
 				}
@@ -830,6 +1023,93 @@
 		
 		function deleteScheduleDate(schedule_date){
 			$(schedule_date).remove();
+		}
+		
+		function resetSchedule(){
+			$("#schedule_trash_button").attr("type", "hidden");
+			
+			$("#s_cd").val("");
+			
+			$("#schedule_color").val("#000000");
+			$("#schedule_input").val("");
+			$("#schedule_date_selected").html("");
+			$("#schedule_date-select option:selected").prop("selected", false);
+			
+			$("input[name='schedule_repeat']").each(function(){
+				$(this).prop("checked", false);
+			});
+
+			$("input[name='schedule_day']").each(function(){
+				$(this).prop("checked", false);
+			});
+			
+			$("#schedule_day_div").css("display", "none");
+			$("#schedule_date_div").css("display", "none");
+		}
+		
+		function showScheduleDeleteModal(s_cd){
+			$("#schedule_delete_modal").css("display", "flex");
+			
+			$("#schedule_deleteModal_delete").click(function(){
+				//deleteSchedule(s_cd);
+			});
+			
+			$("#schedule_deleteModal_cancel").click(function(){
+				$("#schedule_delete_modal").css("display", "none");
+			});
+		}
+
+		/****************** REPEAT ******************/
+		function repeatChange(r_type, type){
+				
+			if(type == "T"){
+				var repeat = "#todo_repeat_" + r_type;
+				
+				if($(repeat).is(":checked")){
+					$("input[name='todo_repeat']").each(function(){
+						if($(this).val() != r_type){
+							$(this).prop("checked", false);
+						}
+					});
+					
+					if(r_type == "0"){
+						$("#todo_day_div").css("display", "flex");
+						$("#todo_date_div").css("display", "none");
+					}
+					else if(r_type == "1"){
+						$("#todo_date_div").css("display", "flex");
+						$("#todo_day_div").css("display", "none");
+					}
+				}
+				else{
+					$("#todo_day_div").css("display", "none");
+					$("#todo_date_div").css("display", "none");
+				}
+			}
+			else if(type == "S"){
+				var repeat = "#schedule_repeat_" + r_type;
+				
+				if($(repeat).is(":checked")){
+					$("input[name='schedule_repeat']").each(function(){
+						if($(this).val() != r_type){
+							$(this).prop("checked", false);
+						}
+					});
+					
+					if(r_type == "0"){
+						$("#schedule_day_div").css("display", "flex");
+						$("#schedule_date_div").css("display", "none");
+					}
+					else if(r_type == "1"){
+						$("#schedule_date_div").css("display", "flex");
+						$("#schedule_day_div").css("display", "none");
+					}
+				}
+				else{
+					$("#schedule_day_div").css("display", "none");
+					$("#schedule_date_div").css("display", "none");
+				}
+			}
 		}
 </script>
 
@@ -885,6 +1165,24 @@
 	            TO-DO !
 	         </p>
 	     </div>
+	     
+	    <div class = "modal delete_modal" id = "todo_delete_modal">
+			<table>
+				<tr>
+					<td>
+						<h2 class = "modal_font">삭제 하시겠습니까?</h2>
+						<p class = "kor_font">※복구 불가능※</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type = "button" value = "DELETE" class = "oswald-menu btn deleteModal_delete" id = "todo_deleteModal_delete" />
+						<input type = "button" value = "CANCEL"  class = "oswald-menu btn deleteModal_cancel" id = "todo_deleteModal_cancel"/>
+					</td>
+				</tr>
+			</table>
+		</div>
+	     
          <div class = "to-do_table_div ">
 	         <table id = "to-do_table">
 	         		<c:if test="${fn:length(todoList) eq 0}">
@@ -938,13 +1236,20 @@
 	         				<td>
 			         			<input type = "text" id = "to-do_input" class = "input-field kor_font" placeholder = "ToDo 입력..">
 			         			<input class="check_button" type="submit" value = "">
-						        <input class="delete_button" type="reset" value = "">
+						        <input class="delete_button" type="reset" value = "" onClick = "resetTodo()">
+						        <input class="trash_button" id = "todo_trash_button" type="hidden" value = "">
 	         				</td>
 	         			</tr>
 			        </table>
          		</div>
          		
          		<div class = "select_div kor_font">
+         			 <label for="to-do_input" class="kor_font">Repeat |  </label>
+         			<input type = "checkbox" class = "select_repeat"  name = "todo_repeat" id = "todo_repeat_0" value = "0" onchange = "repeatChange('0', 'T')"/> Day
+         			<input type = "checkbox" class = "select_repeat"  name = "todo_repeat" id = "todo_repeat_1"  value = "1" onchange = "repeatChange('1', 'T')"/> Date
+         		</div>
+         		
+         		<div class = "select_div kor_font" id = "todo_day_div">
          			 <label for="to-do_input" class="kor_font">Day |  </label>
          			<input type = "checkbox" class = "select_checkbox"  name = "todo_day" value = "일"/> 일
          			<input type = "checkbox" class = "select_checkbox"  name = "todo_day" value = "월"/> 월
@@ -955,7 +1260,7 @@
          			<input type = "checkbox" class = "select_checkbox"  name = "todo_day" value = "토"/> 토
          		</div>
          		
-         		<div class = "select_div kor_font">
+         		<div class = "select_div kor_font" id = "todo_date_div">
 			        <label for="todo_date-select" class="kor_font">Date |  </label>
 			        <select id="todo_date-select" name="todo_date-select" onchange = "selectTodoDate(this)">
 					    <option value="">날짜 선택</option>
@@ -986,45 +1291,30 @@
 		            SCHEDULE !
 		         </p>
 		    </div>
-		    
+	     
+		    <div class = "modal delete_modal" id = "schedule_delete_modal">
+				<table>
+					<tr>
+						<td>
+							<h2 class = "modal_font">삭제 하시겠습니까?</h2>
+							<p class = "kor_font">※복구 불가능※</p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type = "button" value = "DELETE" class = "oswald-menu btn deleteModal_delete" id = "schedule_deleteModal_delete"/>
+							<input type = "button" value = "CANCEL"  class = "oswald-menu btn deleteModal_cancel" id = "schedule_deleteModal_cancel" />
+						</td>
+					</tr>
+				</table>
+			</div>
+		
 	         <div class = "schedule_table_div">
-		         <table id = "schedule_table">
-			         <c:if test="${fn:length(scheduleList) eq 0}">
-		         			<tr>
-		         				<td></td>
-		         				<td><label class="kor_font" style = "color : gray"> 오늘의 일정을 등록해주세요 :)</label>	</td>
-		         			</tr>
-		         		</c:if>
-		         		<c:if test="${fn:length(scheduleList) > 0}">
-		         				<c:forEach var = "schedule" items = "${scheduleList}" varStatus = "status">
-		         					<tr>
-					         			<td  class="td_left" width="25%">
-					         				<p class="kor_font"> ■ </p>
-					         			</td>
-					         			<td>
-					         				<p class="kor_font"> 
-						         				 <a href = "javascript:void(0);" onClick = "schedule_Click(this)" id = "${schedule.s_cd }">
-						         					<c:if test = "${not empty schedule.g_cd }">
-						         						<span id = "${schedule.s_cd }_g_name" style = "color:${schedule.s_color }">${schedule.g_name }&nbsp;|</span>
-						         					</c:if>
-						         						<span id = "${schedule.s_cd }_s_name"  style = "color:${schedule.s_color }">${schedule.s_name }</span>
-					         					</a>
-					         				</p>
-					         				
-					         				<input type = "hidden" id = "${schedule.s_cd }_s_color" value = "${schedule.s_color }">
-					         				<input type = "hidden" id = "${schedule.s_cd }_s_memo" value = "${schedule.s_memo }">
-					         				<input type = "hidden" id = "${schedule.s_cd }_r_type" value = "${schedule.r_type }">
-					         				<input type = "hidden" id = "${schedule.s_cd  }_r_detail" value = "${schedule.r_detail }">
-					         			</td>
-				         			</tr>
-		         			</c:forEach>
-		         		</c:if>
-		         </table>
 	         </div>
          
           <!-- 입력창 추가 -->
          <div class = "input-container">
-         	<form>
+         	<form:form id="schedule_form" commandName="schedule" action="insertSchedule.calendar" method="post">
          		<div class = "input_div">
          			<table id = "schedule_table_input">
 	         			<tr>
@@ -1032,9 +1322,11 @@
 		         				<p class="kor_font"> ■ </p>
 		         			</td>
 	         				<td>
-			         			<input type = "text" id = "schedule_input" class = "input-field kor_font" placeholder = "일정 등록..">
-			         			<input class="check_button" type="submit" value="">
-						        <input class="delete_button" type="submit" value="">
+			         			<input type = "text" id = "schedule_input" class = "input-field kor_font" placeholder = "일정 등록.." name = "s_name">
+			         			<input class="check_button" id = "schedule_check_button" type="submit" value="">
+						        <input class="delete_button" id = "schedule_delete_button" type="reset" value="" onClick = "resetSchedule()">
+						        <input class="trash_button" id = "schedule_trash_button" type="hidden" value = "">
+						        <br><span id = "s_name_valid"  class = "vaild_font"></span>
 	         				</td>
 	         			</tr>
 			        </table>
@@ -1042,22 +1334,30 @@
          		
          		<div class = "select_div kor_font">
          			 <label for="schedule_group-select" class="kor_font">Color |  </label>
-         			 <input type = "color" id = "schedule_color"/>
+         			 <input type = "color" id = "schedule_color" name = "s_color"/>
+					 <span id = "s_color_valid"  class = "vaild_font">&nbsp;</span>
          		</div>
          		
          		<div class = "select_div kor_font">
          			 <label for="schedule_group-select" class="kor_font">Group |  </label>
-         			 <select id="schedule_group-select" name="schedule_group-select">
+         			 <select id="schedule_group-select" name="schedule_group-select" name = "g_cd">
 					    <option value="">모임 선택</option>
 					</select>
          		</div>
          		
          		<div class = "select_div kor_font">
          			 <label for="schedule_input" class="kor_font">Memo |  </label>
-			        <input type="text" id="schedule_memo_input" class="input-field_sub kor_font" placeholder="메모 입력.."/>
+			        <input type="text" id="schedule_memo_input" class="input-field_sub kor_font" placeholder="메모 입력.." name = "s_memo"/>
+					 <span id = "s_memo_valid"  class = "vaild_font">&nbsp;</span>
          		</div>
          		
          		<div class = "select_div kor_font">
+         			 <label for="to-do_input" class="kor_font">Repeat |  </label>
+         			<input type = "checkbox" class = "select_repeat"  name = "schedule_repeat" value = "0" id = "schedule_repeat_0" onchange = "repeatChange('0', 'S')"/> Day
+         			<input type = "checkbox" class = "select_repeat"  name = "schedule_repeat" value = "1" id = "schedule_repeat_1" onchange = "repeatChange('1', 'S')"/> Date
+         		</div>
+         		
+         		<div class = "select_div kor_font"  id = "schedule_day_div">
          			 <label for="to-do_input" class="kor_font">Day |  </label>
          			<input type = "checkbox" class = "select_checkbox"  name = "schedule_day" value = "일"/> 일
          			<input type = "checkbox" class = "select_checkbox"  name = "schedule_day" value = "월"/> 월
@@ -1068,7 +1368,7 @@
          			<input type = "checkbox" class = "select_checkbox"  name = "schedule_day" value = "토"/> 토
          		</div>
          		
-         		<div class = "select_div kor_font">
+         		<div class = "select_div kor_font"   id = "schedule_date_div">
 			        <label for="schedule_date-select" class="kor_font">Date |  </label>
 			        <select id="schedule_date-select" name="schedule_date-select"  onchange = "selectScheduleDate(this)">
 					    <option value="">날짜 선택</option>
@@ -1087,8 +1387,10 @@
 			        <label for="schedule_date-select" class="kor_font"> 일 </label>
 			        
 			        <label id = "schedule_date_selected">&nbsp;</label>
+			        
+         			<input type = "hidden" id = "s_cd">
          		</div>
-         	</form>
+         	</form:form>
          </div>
 		</div>
 		

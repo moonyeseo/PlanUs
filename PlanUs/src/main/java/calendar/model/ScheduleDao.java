@@ -19,4 +19,22 @@ public class ScheduleDao {
 
 		return scheduleList;
 	}
+
+	public void insertSchedule(ScheduleBean schedule) {
+		int cnt = -1;
+		cnt = sqlSessionTemplate.insert(namespace + ".insertSchedule", schedule);
+		
+		if(cnt == -1) {
+			System.out.println("schedule insert 실패");
+		}
+		else if(cnt > 0) {
+			System.out.println("schedule insert 성공");
+		}
+	}
+
+	public String getRecentS_cd() {
+		String s_cd = sqlSessionTemplate.selectOne(namespace + ".getRecentS_cd");
+		
+		return s_cd;
+	}
 }
